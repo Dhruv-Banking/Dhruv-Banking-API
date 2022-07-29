@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
             userObj,
             process.env.ACCESS_TOKEN_SECRET
           );
-          res.send({ accessToken: accessToken });
+          res.send({ accessToken });
         } else {
           res.send("Not allowed");
         }
