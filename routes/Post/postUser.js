@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { Pool } = require("pg");
 const { v4: uuid4 } = require("uuid");
 require("dotenv").config({ path: "../../.env" });
+const auth = require("../../middleware/auth/auth");
 
 router.use(express.json());
 
@@ -13,13 +14,13 @@ const pool = new Pool({
   connectionString,
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth.authenticateToken, async (req, res) => {
   const body = req.body;
 
   let correctBody = true;
 
   let user = {
-    uuid: uuid4(),
+    uuid: uuid4(), // Generate a completly random uuid
     username: body.username,
     firstname: body.firstname,
     lastname: body.lastname,

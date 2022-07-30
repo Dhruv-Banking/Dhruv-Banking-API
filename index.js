@@ -13,6 +13,13 @@ const authUserLogin = require("./routes/Post/userLoginAuth");
 
 // GET
 const getAllUsers = require("./routes/Get/getAllUsers");
+const specificUser = require("./routes/Get/specificUser");
+
+// Delete
+const deleteUser = require("./routes/Delete/deleteUser");
+
+// PUT
+const updateUser = require("./routes/Put/updateUser");
 
 const app = express();
 app.use(express.json());
@@ -35,6 +42,13 @@ app.use("/authUserLogin", authUserLogin);
 
 // GET
 app.use("/getAllUsers", getAllUsers);
+app.use("/specificUser", specificUser);
+
+// Delete
+app.use("/deleteUser", deleteUser);
+
+// PUT
+app.use("/updateUser", updateUser);
 
 app.get("/", auth.authenticateToken, (req, res) => {
   res.send({ detail: "Please pick an endpoint, refer to the docs" });
