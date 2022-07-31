@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 
 const connectionString = process.env.CONNECTIONSTRING;
 
+router.use(express.json());
+
 const pool = new Pool({
   connectionString,
 });
