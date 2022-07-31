@@ -2,6 +2,7 @@ const express = require("express");
 const { Pool } = require("pg");
 require("dotenv").config();
 const morgan = require("morgan");
+const cors = require("cors");
 
 // Auth Route
 const login = require("./middleware/auth/login");
@@ -21,9 +22,16 @@ const deleteUser = require("./routes/Delete/deleteUser");
 // PUT
 const updateUser = require("./routes/Put/updateUser");
 
+// PUT (Transfer Money)
+const checkingsToSavings = require("./routes/Put/PutMoney/TransferMoney/checkingsToSavings");
+const savingsToCheckings = require("./routes/Put/PutMoney/TransferMoney/savingsToCheckings");
+
+const transferToAnotherUser = require("./routes/Put/PutMoney/TransferMoney/toAnotherUser");
+
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cors());
 
 const connectionString = process.env.CONNECTIONSTRING;
 
@@ -49,6 +57,12 @@ app.use("/deleteUser", deleteUser);
 
 // PUT
 app.use("/updateUser", updateUser);
+
+// PUT (Transfer Money)
+app.use("/checkingsToSavings", checkingsToSavings);
+app.use("/savingsToCheckings", savingsToCheckings);
+
+app.use("/transferToAnotherUser", transferToAnotherUser);
 
 app.get("/", auth.authenticateToken, (req, res) => {
   res.send({ detail: "Please pick an endpoint, refer to the docs" });
