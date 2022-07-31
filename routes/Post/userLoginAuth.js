@@ -5,6 +5,8 @@ const { Pool } = require("pg");
 require("dotenv").config({ path: "../../.env" });
 const auth = require("../../middleware/auth/auth");
 
+router.use(express.json());
+
 const connectionString = process.env.CONNECTIONSTRING;
 const pool = new Pool({
   connectionString,
