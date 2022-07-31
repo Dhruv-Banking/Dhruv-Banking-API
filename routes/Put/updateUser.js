@@ -35,6 +35,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
 
   pool.query(existsQuery, existsValues, async (err, sqlRes) => {
     if (err) {
+      res.status(500).send({ detail: err.stack });
     } else if (sqlRes.rows[0].exists === false) {
       res.status(400).send({ detail: "User does not exist" });
     } else {
@@ -44,7 +45,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
 
           pool.query(query, values, (sqlErr, sqlRes) => {
             if (sqlErr) {
-              res.status(500).send({ detail: err.stack });
+              res.status(500).send({ detail: sqlErr.stack });
             } else {
               res
                 .status(201)
@@ -57,7 +58,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
 
           pool.query(query, values, (sqlErr, sqlRes) => {
             if (sqlErr) {
-              res.status(500).send({ detail: err.stack });
+              res.status(500).send({ detail: sqlErr.stack });
             } else {
               res
                 .status(201)
@@ -69,7 +70,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
 
           pool.query(query, values, (sqlErr, sqlRes) => {
             if (sqlErr) {
-              res.status(500).send({ detail: err.stack });
+              res.status(500).send({ detail: sqlErr.stack });
             } else {
               res
                 .status(201)
@@ -81,7 +82,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
 
           pool.query(query, values, (sqlErr, sqlRes) => {
             if (sqlErr) {
-              res.status(500).send({ detail: err.stack });
+              res.status(500).send({ detail: sqlErr.stack });
             } else {
               res
                 .status(201)
@@ -102,7 +103,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
 
           pool.query(query, values, (sqlErr, sqlRes) => {
             if (sqlErr) {
-              res.status(500).send({ detail: err.stack });
+              res.status(500).send({ detail: sqlErr.stack });
             } else {
               res
                 .status(201)
