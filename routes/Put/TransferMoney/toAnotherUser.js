@@ -1,8 +1,8 @@
 const express = require("express");
 let router = express.Router();
 const { Pool } = require("pg");
-const auth = require("../../../../middleware/auth/auth");
-require("dotenv").config({ path: "../../../../.env" });
+const auth = require("../../../middleware/auth/auth");
+require("dotenv").config({ path: "../../../.env" });
 
 const connectionString = process.env.CONNECTIONSTRING;
 
