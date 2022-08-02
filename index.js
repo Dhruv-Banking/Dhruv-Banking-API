@@ -23,10 +23,10 @@ const deleteUser = require("./routes/Delete/deleteUser");
 const updateUser = require("./routes/Put/updateUser");
 
 // PUT (Transfer Money)
-const checkingsToSavings = require("./routes/Put/PutMoney/TransferMoney/checkingsToSavings");
-const savingsToCheckings = require("./routes/Put/PutMoney/TransferMoney/savingsToCheckings");
+const checkingsToSavings = require("./routes/Put/TransferMoney/checkingsToSavings");
+const savingsToCheckings = require("./routes/Put/TransferMoney/savingsToCheckings");
 
-const transferToAnotherUser = require("./routes/Put/PutMoney/TransferMoney/toAnotherUser");
+const transferToAnotherUser = require("./routes/Put/TransferMoney/toAnotherUser");
 
 const app = express();
 app.use(express.json());
