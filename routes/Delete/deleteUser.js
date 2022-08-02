@@ -9,7 +9,7 @@ require("dotenv").config({ path: "../../.env" }); // Dotenv, to read a .env file
 // Connection string from the dotenv file
 const connectionString = process.env.CONNECTIONSTRING;
 
-// Allowing out app to use json in the request body
+// Allowing our app to use json in the request body
 router.use(express.json());
 
 // Creating a connection pool
@@ -19,7 +19,7 @@ const pool = new Pool({
 
 // This is the endpoint to delete a user, it takes 2 Parameters:
 // @request.body.username, and the
-// @request.body.password so we can authenticate if a user is even deleted.
+// @request.body.password so we can authenticate if a user even wants to delete their account
 router.delete("/", auth.authenticateToken, async (req, res) => {
   // Var to determin is a user is ready to delete.
   let readyToDelete = false;
