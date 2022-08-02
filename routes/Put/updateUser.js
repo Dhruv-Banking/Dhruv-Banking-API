@@ -1,4 +1,4 @@
-// Imports 
+// Imports
 const express = require("express"); // express as API
 let router = express.Router(); // Router
 const bcrypt = require("bcrypt"); // Encryption
@@ -47,18 +47,18 @@ router.put("/", auth.authenticateToken, (req, res) => {
   // Here is the query to check wheather the user does exist
   const existsQuery = "SELECT EXISTS(SELECT * from users WHERE username=$1);";
   const existsValues = [username];
-  
+
   // This is the callback function to query the database to know if the user exists
   pool.query(existsQuery, existsValues, async (err, sqlRes) => {
     // If error, then we throw an error
     if (err) {
       res.status(500).send({ detail: err.stack });
-    } 
+    }
     // else if the json returned is false, then we know the user does not exist
     else if (sqlRes.rows[0].exists === false) {
       res.status(400).send({ detail: "User does not exist" });
     }
-    // else we know the user exists. 
+    // else we know the user exists.
     else {
       // If the correctBody variable is true, then we know that the request body is correct
       if (correctBody) {
@@ -76,7 +76,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
             }
             const values = [changeTo, username];
           });
-        } 
+        }
         // else if the record is equal to firstname, then we know to update the firstname
         else if (changeRecord === "firstname") {
           const query = "UPDATE users SET firstname=$1 WHERE username=$2";
@@ -90,7 +90,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
                 .send({ detail: `Successfully updated ${username}` });
             }
           });
-        } 
+        }
         // else if the record is lastname, then we know to update the lastname
         else if (changeRecord === "lastname") {
           const query = "UPDATE users SET lastname=$1 WHERE username=$2";
@@ -104,7 +104,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
                 .send({ detail: `Successfully updated ${username}` });
             }
           });
-        } 
+        }
         // else if the record is email, then we know to update the email.
         else if (changeRecord === "email") {
           const query = "UPDATE users SET email=$1 WHERE username=$2";
@@ -118,7 +118,7 @@ router.put("/", auth.authenticateToken, (req, res) => {
                 .send({ detail: `Successfully updated ${username}` });
             }
           });
-        } 
+        }
         // else if the record is password, then we know to update the password
         else if (changeRecord === "password") {
           const query = "UPDATE users SET password=$1 WHERE username=$2";
