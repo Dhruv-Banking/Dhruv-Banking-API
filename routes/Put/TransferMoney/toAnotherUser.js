@@ -1,21 +1,12 @@
 // Imports
 const express = require("express"); // Express as an API
 let router = express.Router(); // Router
-const { Pool } = require("pg"); // Query the database
+const pool = require("../../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../../middleware/auth/auth"); // Authentication
-require("dotenv").config({ path: "../../../.env" }); // Dotenv, to read a .env file
 const bcrypt = require("bcrypt"); // Encryption
-
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
 
 // Allowing out app to use json in the request body
 router.use(express.json());
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the endpoint to send money from one user to another
 // It takes 4 parameters:

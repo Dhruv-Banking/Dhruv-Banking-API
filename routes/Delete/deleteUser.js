@@ -1,21 +1,13 @@
 // Imports
 const express = require("express"); // Express as an API
 let router = express.Router(); // Router
-const { Pool } = require("pg"); // Query the database
+const pool = require("../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../middleware/auth/auth"); // Authentication
 const bcrypt = require("bcrypt"); // Encryption
 require("dotenv").config({ path: "../../.env" }); // Dotenv, to read a .env file
 
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
-
 // Allowing our app to use json in the request body
 router.use(express.json());
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the endpoint to delete a user, it takes 2 Parameters:
 // @request.body.username, and the

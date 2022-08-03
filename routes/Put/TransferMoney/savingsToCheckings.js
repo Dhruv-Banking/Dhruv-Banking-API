@@ -2,20 +2,11 @@
 const express = require("express"); // Express as an API
 let router = express.Router(); // Router
 const bcrypt = require("bcrypt"); // Encryption
-const { Pool } = require("pg"); // Query the database
+const pool = require("../../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../../middleware/auth/auth"); // Authenticaton
-require("dotenv").config({ path: "../../../.env" }); // Dotenv, to read the .env file
-
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
 
 // Alowing router to accept json in the request body
 router.use(express.json());
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the query to send money from Savings to Checkings
 // It takes 3 parameters:
@@ -48,8 +39,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
   // If the body is of correct format, then we knwo to continue to send money
   if (correctBody) {
     // check if the user exists query/values
-    const existsQuery =
-      "SELECT checkings, password FROM users WHERE username=$1";
+    const existsQuery = "SELECT savings, password FROM users WHERE username=$1";
     const existsValues = [username];
 
     // Variable to check of the user even exists
@@ -66,9 +56,9 @@ router.put("/", auth.authenticateToken, async (req, res) => {
         res.status(400).send({ detail: "Can not find user" });
       }
 
-      // var to check if the user is logged in: Which is set to true by defaul
+      // var to check if the user is logged in: Which is set to true by default
       let loggedIn = true;
-      
+
       // here we are checking if !true as the retruned for 'bcrypt.compare', then we know the user is not, or logged in the reason for this:
       // is so we don't need an else statement, and we can just have a If, f
       if (!(await bcrypt.compare(password, sqlRes.rows[0].password))) {
@@ -76,22 +66,21 @@ router.put("/", auth.authenticateToken, async (req, res) => {
         res.status(400).send({ detail: "User not authenticated" });
       }
 
-      // Here we are checking if the user exists, and is logged in, then we know the user is ready to send money 
+      // Here we are checking if the user exists, and is logged in, then we know the user is ready to send money
       if (userExists && loggedIn) {
         // Var for readability
-        const savingsAmount = sqlRes.rows[0].checkings;
-        
+        const savingsAmount = sqlRes.rows[0].savings;
+
         // here we are checking if the amount the user sent is more than the total amonut in their savings
         if (amount > savingsAmount) {
           res.status(400).send({ detail: "Insufficent funds" });
-        } 
+        }
         // else, we know there is enough money in the account
         else {
           // Money queries to add, and subtract the money
           const moneyQuery =
             "UPDATE users SET savings=savings-$1, checkings=checkings+$2 WHERE username=$3";
           const moneyValues = [amount, amount, username];
-
           // Querying the database to add money to checkings, and remove the rest trom savings
           pool.query(moneyQuery, moneyValues, (sqlErr, sqlResponse) => {
             // If error, then we send back the error
@@ -99,7 +88,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
               res
                 .status(500)
                 .send({ detail: "Unknows error with transfering money" });
-            } 
+            }
             // else we know the query succedded.
             else {
               res.status(201).send({

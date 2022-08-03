@@ -2,20 +2,12 @@
 const express = require("express"); // express as API
 let router = express.Router(); // Router
 const bcrypt = require("bcrypt"); // Encryption
-const { Pool } = require("pg"); // Query the database
+const pool = require("../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../middleware/auth/auth"); // Authentication
 require("dotenv").config({ path: "../../.env" }); // Dotenv, to read the .env file
 
 // Allowing hte app to use json in the request body
 router.use(express.json());
-
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the request body to update a user
 // It takes 3 parameters:

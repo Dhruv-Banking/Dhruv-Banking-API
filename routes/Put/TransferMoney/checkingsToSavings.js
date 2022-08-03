@@ -1,21 +1,12 @@
-// Imports 
+// Imports
 const express = require("express"); //  Express as an API
 let router = express.Router(); // Router
 const bcrypt = require("bcrypt"); // Encryption
-const { Pool } = require("pg");  // QUery the databse
+const pool = require("../../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../../middleware/auth/auth"); // Authentication
-require("dotenv").config({ path: "../../../.env" }); // Dotenv, to read the .env file
-
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
 
 // Allowing our app to use json in the request body
 router.use(express.json());
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the endpoint to send money from Checkings to Savings
 // It takes 3 parameters:
@@ -28,7 +19,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
   const amount = req.body.amount;
   const password = req.body.password;
 
-  // This is the variable to determine if we are ready to send the money 
+  // This is the variable to determine if we are ready to send the money
   let correctBody = true;
 
   // Here we are checking if the type is null (not provided) or string (user provided string)
@@ -65,7 +56,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
         userExists = false;
         res.status(400).send({ detail: "Can not find user" });
       }
-      
+
       // Var to check if the user is logged: Which is set to true by default
       let loggedIn = true;
 
@@ -83,7 +74,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
         // checking is the amount is more than what we have in out checkings account
         if (amount > checkingsAmount) {
           res.status(400).send({ detail: "Insufficent funds" });
-        } 
+        }
         // else we know we have enough money
         else {
           // Queried to increase from savings, and to decrease it from checkings
@@ -98,7 +89,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
               res
                 .status(500)
                 .send({ detail: "Unknows error with transfering money" });
-            } 
+            }
             // else we know that the query succeded and sent the money
             else {
               res.status(201).send({

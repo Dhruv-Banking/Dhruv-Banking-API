@@ -2,21 +2,12 @@
 const express = require("express"); // Express as an API
 let router = express.Router(); // Router
 const bcrypt = require("bcrypt"); // Encryption
-const { Pool } = require("pg"); // Query the database
+const pool = require("../../database/pool"); // Pooling the connections to one pool
 const { v4: uuid4 } = require("uuid"); // UUID maker
-require("dotenv").config({ path: "../../.env" }); // Dotenv, to read a .env file
 const auth = require("../../middleware/auth/auth"); // Authentication
-
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
 
 // Allowing out app to use json in the request body
 router.use(express.json());
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the endpoint to post a user to the databse
 // It takes 5 parameters:

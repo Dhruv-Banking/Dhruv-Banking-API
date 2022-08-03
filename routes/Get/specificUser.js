@@ -1,20 +1,11 @@
 // Imports
 const express = require("express"); // Express as an API
 let router = express.Router(); // Router
-const { Pool } = require("pg"); // Query the database
-require("dotenv").config({ path: "../../.env" }); // Dotenv, to read a .env file
+const pool = require("../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../middleware/auth/auth"); // Authentication
-
-// Connection string from the dotenv file
-const connectionString = process.env.CONNECTIONSTRING;
 
 // Allowing out app to use json in the request body
 router.use(express.json());
-
-// Creating a connection pool
-const pool = new Pool({
-  connectionString,
-});
 
 // This is the endpoint to get a specific user
 // It takes one query parameter:
