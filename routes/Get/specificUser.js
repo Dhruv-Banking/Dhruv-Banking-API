@@ -22,7 +22,7 @@ router.get("/", auth.authenticateToken, (req, res) => {
 
   // This is the query to get everything, but the password (for security reasons)
   const query =
-    "SELECT uuid, username, firstname, lastname, email, savings, checkings FROM users WHERE username=$1";
+    "SELECT uuid, username, firstname, lastname, email, savings, checkings, role FROM users WHERE username=$1";
   const values = [username];
 
   // If the user is real, then we execute the program

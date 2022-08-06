@@ -34,6 +34,7 @@ router.post("/", auth.authenticateToken, async (req, res) => {
     password: body.password,
     checkings: 0, // New user checkings
     savings: 0, // New user savings
+    role: "BASIC",
   };
 
   // Here we are checking if the password is empty, if so
@@ -110,7 +111,7 @@ router.post("/", auth.authenticateToken, async (req, res) => {
       if (correctBody) {
         // Query, and values to post the user to the database
         const query =
-          "INSERT INTO users (uuid, username, firstname, lastname, email, password, savings, checkings) VALUES($1, $2, $3, $4, $5, $6, $7, $8 )";
+          "INSERT INTO users (uuid, username, firstname, lastname, email, password, savings, checkings, role) VALUES($1, $2, $3, $4, $5, $6, $7, $8 , $9)";
         const values = [
           user.uuid,
           user.username,
@@ -120,6 +121,7 @@ router.post("/", auth.authenticateToken, async (req, res) => {
           user.password,
           user.savings,
           user.checkings,
+          user.role,
         ];
 
         // Here we are just posting the user to the database

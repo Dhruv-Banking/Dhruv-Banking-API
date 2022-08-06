@@ -20,7 +20,7 @@ const pool = new Pool({
 // @request.body.password
 router.post("/", async (req, res) => {
   // Querying the database
-  const query = "SELECT * FROM supercoolbois WHERE username=$1";
+  const query = "SELECT * FROM users WHERE username=$1";
   const values = [req.body.name];
 
   try {
@@ -37,14 +37,13 @@ router.post("/", async (req, res) => {
         const user = {
           name: sqlRes.rows[0].username,
           password: sqlRes.rows[0].password,
+          role: sqlRes.rows[0].role,
         };
 
         // If the hased password, and the password requested are the same, then we return true
         if (await bcrypt.compare(req.body.password, user.password)) {
-          const userObj = { name: user.name };
-
           // Generate the access token
-          const accessToken = generateAccessToken(userObj);
+          const accessToken = generateAccessToken(user);
 
           // Then we send back the access token.
           res.send({ accessToken: accessToken });
