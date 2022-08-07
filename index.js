@@ -3,6 +3,13 @@ const { Pool } = require("pg");
 require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
+const rateLimiter = require("express-rate-limit");
+
+const limiter = rateLimiter({
+  windowMs: 30 * 60 * 1000, // 30 Minutes
+  max: 300, // Max of 1 per second
+  message: { detail: "You are being rate limited." },
+});
 
 // Auth Route
 const login = require("./middleware/auth/login");
@@ -32,6 +39,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
+app.use(limiter);
 
 const connectionString = process.env.CONNECTIONSTRING;
 
