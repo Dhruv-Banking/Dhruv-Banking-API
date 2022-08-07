@@ -4,6 +4,7 @@ let router = express.Router(); // Router
 const pool = require("../../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../../middleware/auth/auth"); // Authentication
 const bcrypt = require("bcrypt"); // Encryption
+const verRole = require("../../../middleware/roles/authToken");
 
 // Allowing out app to use json in the request body
 router.use(express.json());
@@ -14,7 +15,7 @@ router.use(express.json());
 // @request.body.userTo
 // @request.body.amount
 // @request.body.password
-router.put("/", auth.authenticateToken, (req, res) => {
+router.put("/", auth.authenticateToken, verRole.toAnotherUser, (req, res) => {
   const userFrom = req.query.userFrom;
   const userTo = req.body.userTo;
   const amount = req.body.amount;

@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt"); // Encryption
 const pool = require("../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../middleware/auth/auth"); // Authentication
 require("dotenv").config({ path: "../../.env" }); // Dotenv, to read the .env file
+const verRole = require("../../middleware/roles/authToken");
 
 // Allowing hte app to use json in the request body
 router.use(express.json());
@@ -14,7 +15,7 @@ router.use(express.json());
 // @request.query.username
 // @request.body.change
 // @request.body.changeTo
-router.put("/", auth.authenticateToken, (req, res) => {
+router.put("/", auth.authenticateToken, verRole.updateUser, (req, res) => {
   // var to determine if we are ready to update the user
   let correctBody = true;
 
