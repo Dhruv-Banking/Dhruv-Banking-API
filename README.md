@@ -45,4 +45,44 @@ Your directory should look like this:
 
 <img src="images/Dir__Tree.png" alt="Tree of the current directory" title="Tree of the current directory">
 
-### Postgresql
+---
+
+## User Modal
+
+- There are 3 models for users, but they all follow the same base user:
+
+```json
+{
+  "uuid": "e2aad8a3-9968-4e2a-a0a3-a27f0b0519ba",
+  "username": "Rick__Astley",
+  "firstname": "Rick",
+  "lastname": "Astley",
+  "email": "rickastleyissocool@rick.astley",
+  "password": "$2b$12$5z39LzhwvGI7jKfzTF7okOOR12q96CSRsavjgsGAj8hI4bquHIuye",
+  "savings": 0,
+  "checkings": 0,
+  "role": "BASIC"
+}
+```
+
+as you can see, the password is hashed in-case a hacker get's access to the database.
+
+---
+
+## End points
+
+> http:/localhost:3000 is a place holder untill i host it on google
+
+List of all endpoints (Currently):
+
+- [http://localhost:3000](#http://localhost:3000)
+- [http://localhost:3000/users/login](#http://localhost:3000/users/login)
+- `http://localhost:3000/getAllUsers`
+- `http://localhost:3000/specificUser?username={username}`
+- `http://localhost:3000/postUser`
+- `http://localhost:3000/authUserLogin`
+- `http://localhost:3000/deleteUser`
+- `http://localhost:3000/updateUser?username={username}}`
+- `http://localhost:3000/checkingsToSavings?username={username}`
+- `http://localhost:3000/savingsToCheckings?username={username}`
+- `http://localhost:3000/transferToAnotherUser?userFrom={username}`
