@@ -43,6 +43,6 @@ $ node
 
 Your directory should look like this:
 
-![Tree of current directory]("images/Dir__Tree.png")
+![Tree of current directory]("https://github.com/Dhruv-Banking/Dhruv-Banking/blob/main/images/Dir__Tree.png")
 
 ### Postgresql
