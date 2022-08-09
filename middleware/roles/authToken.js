@@ -138,9 +138,6 @@ function toAnotherUser(req, res, next) {
   }
 }
 
-// ------------------- Post ------------------- //
-function authPostRoleCreateUser(req, res, next) {}
-
 // Exporting so we can use it from other files.
 module.exports = {
   // Get
