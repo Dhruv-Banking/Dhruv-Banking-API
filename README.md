@@ -2,7 +2,7 @@
 
 ---
 
-[Getting Started](#getting-started) | [User Modal](#user-modal) | [Endpoints](#end-points) | [Tokens](#tokens) | [Flagging Ip's](#flaging-ip) | [Roles](#roles) | [License](#license)
+[Getting Started](#getting-started) | [User Modal](#user-modal) | [Endpoints](#end-points) | [Tokens](#tokens) | [Flagging Ip's](#flagging-ips) | [Roles](#roles) | [License](#license)
 
 ## Getting Started
 
@@ -75,7 +75,7 @@ as you can see, the password is hashed in-case a hacker get's access to the data
 
 Note: All the endpoints require a token, so see [Tokens]() for more info on getting a token
 
-For all endpoints, if the token is null, or you don't provide one -- you'll get this error:
+For all endpoints, if the token is null, or you don't provide one, or if you provide an expired one, or even if you include a fake one -- you'll get this error:
 
 ```json
 {
@@ -135,8 +135,8 @@ When you provide a valid token, the result should be as followed, a list full of
     "lastname": "Astley",
     "email": "rickastleyissocool@rick.astley",
     "password": "$2b$12$5z39LzhwvGI7jKfzTF7okOOR12q96CSRsavjgsGAj8hI4bquHIuye",
-    "savings": 0,
-    "checkings": 0,
+    "savings": 69,
+    "checkings": 420,
     "role": "GOD"
   }
 ]
@@ -152,9 +152,256 @@ if the token provided has the role of "BASIC", then you'll get this error:
 
 ### Localhost:3000/specificUser?username={username}-GET
 
-This is the endpoint to get the data from the user, you can have anyrole to access this endpoint. But you need a token.
+This is the endpoint to get the data from the user, you can have any role to access this endpoint. But you need a token.
 
 For a 200 resposne you should get:
+
+```json
+[
+  {
+    "uuid": "e2aad8a3-9968-4e2a-a0a3-a27f0b0519ba",
+    "username": "Rick__Astley",
+    "firstname": "Rick",
+    "lastname": "Astley",
+    "email": "rickastleyissocool@rick.astley",
+    "savings": 0,
+    "checkings": 0,
+    "role": "GOD"
+  }
+]
+```
+
+or if the user does not exist, you'll get this error:
+
+```json
+{
+  "detail": "User does not exist"
+}
+```
+
+### Localhost:3000/postUser-POST
+
+Any token role can access this endpoint, but if someone from your device has already made a request, then you can not make another one from the same Local IP address.
+
+This is what the request body should look:
+
+```json
+{
+  "username": "Rick__Astley",
+  "firstname": "Rick",
+  "lastname": "Astley",
+  "email": "rickastleyissocool@rick.astley",
+  "password": "ILoveRickAstleyNoHomo"
+}
+```
+
+If the result is successfull you'll get the result of:
+
+```json
+{
+  "detail": "Rick__Astley has been succesfully created!"
+}
+```
+
+If the user with the name already exists, then you'll get this error:
+
+```json
+{
+  "detail": "User with name 'Rick__Astley' already exists"
+}
+```
+
+### Localhost:3000/authUserLogin-POST
+
+This endpoint to to auth the user when they are trying to login. This is done server side for security.
+
+This is what the request body should look like:
+
+```json
+{
+  "username": "Rick__Astley",
+  "password": "ILoveRickAstleyNoHomo"
+}
+```
+
+If the credentials you provided are correct, you'll get this response:
+
+```json
+{
+  "detail": "Success"
+}
+```
+
+if the user does not exist, then you'll get this error:
+
+```json
+{
+  "detail": "Incorrect username."
+}
+```
+
+else if the password is incorrect, then you'll get this error:
+
+```json
+{
+  "detail": "Failiure"
+}
+```
+
+### Localhost:3000/deleteUser-DELETE
+
+This is the endpoint to delete a user from the database, fo for this endpoint, you need to provide the users,
+
+This is what the request body should look like:
+
+```json
+{
+  "username": "RickAstley",
+  "password": "ILoveRickAstleyNoHomo"
+}
+```
+
+If credentials are correct, you will be sent back this message:
+
+```json
+{
+  "detail": "'Rick__Astley' has been succesfully deleted"
+}
+```
+
+or if the user does not exist, then you'll get this error:
+
+```json
+{
+  "detail": "User does not User does not exist"
+}
+```
+
+or if the password is incorrect, then you'll get back this message:
+
+```json
+{
+  "detail": "Password Incorrect."
+}
+```
+
+### Localhost:3000/updateUser?username={username}-PUT
+
+This is the endpoint to update user, you provide the username of the user you want to update, you provide the user who you want to update in the URL.
+
+What the request body should look like:
+
+```json
+{
+  "change": "Username",
+  "changeTo": "rICK__aSTLEY"
+}
+```
+
+if the user does not exist, then you'll get this error:
+
+```json
+{
+  "detail": "Please get a token with the same username as the user you are trying to update"
+}
+```
+
+^ the reason for this error, is because I made a middleware that gets the username from the token, and compares it with the username from the request query, if they are not equal, then it sends back that error
+
+Or if you provide a value to change from that dosent exist:
+
+```json
+{
+  "detail": "Please provide record to change"
+}
+```
+
+### Localhost:3000/checkingsToSavings?username={username}-PUT
+
+### &&
+
+### Localhost:3000/savingsToCheckings?username={username}-PUT
+
+This is the endpoint to send money from checkings, to savings, and vice versa. This endpoint takes your username as a query parameter.
+
+What the request body should look like:
+
+```json
+{
+  "amount": 69420,
+  "password": "ILoveRickAstleyNoHomo"
+}
+```
+
+This is what a successfull result looks like:
+
+```json
+{
+  "detail": "Successfully transered 10 from {account1} to {account2}"
+}
+```
+
+> account1, can be savings, or checkings. Same for account2
+
+Let's say you wanna send money from savings to checkings, first you need to make sure you have enough money, if you don't, then you'll get back this error
+
+```json
+{
+  "detail": "Insufficent funds"
+}
+```
+
+if the user does not exist, then you'll get this error:
+
+```json
+{
+  "detail": "Can not find user"
+}
+```
+
+or if the password is incorrect, you'll get this error:
+
+```json
+{
+  "detail": "User not authenticated"
+}
+```
+
+### Localhost:3000/transferToAnotherUser?userFrom={username}-PUT
+
+This is the endpoint to send money from one user to another.
+
+This is what a successful response looks like:
+
+```json
+{
+  "detail": "Successfully transfered 69420 from 'dRayat' to Rick__Astley"
+}
+```
+
+if the user recieving money does not exist, then we send back this error:
+
+```json
+{
+  "detail": "User to send money to does not exist."
+}
+```
+
+or, the user sending money does not exist, then we send back this error:
+
+```json
+{
+  "detail": "User to send money does not exist."
+}
+```
+
+if the password provided is incorrect, then we also send back this error:
+
+```json
+{
+  "detail": "Password incorrect."
+}
+```
 
 ---
 
@@ -173,9 +420,33 @@ You need to make a **POST** request to `http://localhost:3000/users/login`, and 
 }
 ```
 
+when you provide these details, you should get result that looks like this:
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+}
+```
+
+if the user is not in the database, you will get this error:
+
+```json
+{
+  "detail": "You do not exist."
+}
+```
+
+however, if the password is incorrect, then you'll get this error:
+
+```json
+{
+  "detail": "Incorrect password"
+}
+```
+
 ### How tokens work:
 
-the token gets the role from the table "users", and that's the privldge you get.
+the token gets the role from the table "users", and that's the role you get in the token.
 
 ```js
 const user = {
@@ -185,7 +456,7 @@ const user = {
 };
 ```
 
-and thats the data that the token has. Then we use a middleware to decrypt the token, and then we get the role from that token.
+^ thats the data that the token has. Then we use a middleware to decrypt the token, and then we get the role from that token.
 
 example of the middle ware:
 
@@ -220,4 +491,34 @@ function authRoleGetAllUsers(req, res, next) {
 
 ---
 
-## Flaging Ip's
+## Flagging Ips
+
+Since this is a banking app, we need a fancy smancy way of stopping the same person creating multiple accounts, so, I made a middleware to log the client Local IP address, to stop the same IP from making new accounts.
+
+### How it works:
+
+So I have a middleware setup on the post user endpoint which logs the IP to a database, and if they are in that database, then we know they have already made an account. **But**, if the user has GOD, or ADMIN privledges, then we allow them to make a new account.
+
+---
+
+## Roles
+
+There are 3 Main Roles:
+
+1. GOD
+2. ADMIN
+3. BASIC
+
+But, there is one other role. Dhruv's special role
+
+- DHRUV
+
+This role can be used to make SQL queries to the database, but from the API.
+
+## Licence
+
+So far, there is no Licence -- since it's my own code. And I don't wanna burden anyone with looking at this abomination of an express REST api.
+
+```
+
+```
