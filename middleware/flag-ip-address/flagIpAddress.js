@@ -42,8 +42,6 @@ function flagIpAddress(req, res, next) {
       }
     }
   });
-
-  // If not, then continue
 }
 
 module.exports = {
