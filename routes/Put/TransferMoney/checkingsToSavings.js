@@ -67,7 +67,7 @@ router.put(
         // Var to check if the user is logged: Which is set to true by default
         let loggedIn = true;
 
-        // Here we are checking for the inverse of the password, so if it returns false, then we  knoe the user exists
+        // Here we are checking for the inverse of the password, so if it returns false, then we know the user exists
         if (!(await bcrypt.compare(password, sqlRes.rows[0].password))) {
           loggedIn = false;
           res.status(400).send({ detail: "User not authenticated" });
