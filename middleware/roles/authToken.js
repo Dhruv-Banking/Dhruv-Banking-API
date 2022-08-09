@@ -138,6 +138,9 @@ function toAnotherUser(req, res, next) {
   }
 }
 
+// ------------------- Post ------------------- //
+function authPostRoleCreateUser(req, res, next) {}
+
 // Exporting so we can use it from other files.
 module.exports = {
   // Get
@@ -145,9 +148,10 @@ module.exports = {
   authGetRoleSpecificUsers,
   // Delete
   authGetRoleDeletUser,
-  // Post
+  // Put
   updateUser,
   checkingToSavings,
   savingsToChecking,
   toAnotherUser,
+  // Post
 };
