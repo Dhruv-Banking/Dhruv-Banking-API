@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt"); // Encryption
 const pool = require("../../database/pool"); // Pooling the connections to one pool
 const { v4: uuid4 } = require("uuid"); // UUID maker
 const auth = require("../../middleware/auth/auth"); // Authentication
-const flagIP = require("../../middleware/flag-ip-address/flagIpAddress");
+const flagIP = require("../../middleware/flag-ip-address/flagIpAddress"); // Flagging the IP
+const authTokenPost = require("../../middleware/roles/postUserToken");
 
 // Allowing out app to use json in the request body
 router.use(express.json());
@@ -21,6 +22,7 @@ router.use(express.json());
 router.post(
   "/",
   auth.authenticateToken,
+  authTokenPost.authRolePostUser,
   flagIP.flagIpAddress,
   async (req, res) => {
     // var to make the user body easier to read.

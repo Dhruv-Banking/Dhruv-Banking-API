@@ -5,6 +5,7 @@ let router = express.Router(); // Router
 const { Pool } = require("pg"); // Querying the database
 const jwt = require("jsonwebtoken"); // Json Web Token
 require("dotenv").config({ path: "../../.env" }); // Dotenv
+const roles = require("../roles/roleData");
 
 // Connection string from the dotenv file
 const connectionString = process.env.CONNECTIONSTRING;
@@ -29,7 +30,15 @@ router.post("/", async (req, res) => {
       if (err) res.status(500).send();
       else if (sqlRes.rowCount === 0) {
         // Since a user that returns nothing means they don't exist.
-        res.status(400).send({ detail: "You do not exist." });
+        const postUser = {
+          username: req.body.name,
+          role: roles.viewer,
+          password: req.body.password,
+        };
+
+        const accessToken = generateAccessTokenViewer(postUser);
+
+        res.send({ postUserToken: accessToken });
       }
       // Else we know the user does exist, therefore we continue
       else {
@@ -60,6 +69,10 @@ router.post("/", async (req, res) => {
 // Function to generate the access token.
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+}
+
+function generateAccessTokenViewer(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 }
 
 module.exports = router;

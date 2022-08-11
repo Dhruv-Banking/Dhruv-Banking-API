@@ -45,13 +45,17 @@ router.delete("/", auth.authenticateToken, async (req, res) => {
     }
     // else we know the user exists, then we start to authenticate them
     else {
-      // Here we are comparing the hased passwords to check if they match, if they do, then we know we are ready to delete the user.
-      if (await bcrypt.compare(user.password, sqlRes.rows[0].password)) {
-        readyToDelete = true;
-      }
-      // else we know the password they entered was incorrect
-      else {
-        res.status(400).send({ detail: "Password Incorrect." });
+      try {
+        // Here we are comparing the hased passwords to check if they match, if they do, then we know we are ready to delete the user.
+        if (await bcrypt.compare(user.password, sqlRes.rows[0].password)) {
+          readyToDelete = true;
+        }
+        // else we know the password they entered was incorrect
+        else {
+          res.status(400).send({ detail: "Password Incorrect." });
+        }
+      } catch (ex) {
+        res.status(500).send({ detail: ex });
       }
 
       // Then we check if readyToDelete == true

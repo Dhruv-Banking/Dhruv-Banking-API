@@ -28,9 +28,14 @@ router.post("/", auth.authenticateToken, async (req, res) => {
   const values = [user.username];
 
   // checking if the username is null, or undefinded
-  if (user.username === undefined || user.username === null) {
+  if (
+    user.username === undefined ||
+    user.username === null ||
+    user.password === undefined ||
+    user.password === null
+  ) {
     // if so, then we send an error
-    res.status(400).send({ detail: "Provide Username" });
+    res.status(400).send({ detail: "Provide Username or Password." });
   }
   // else we know the caller is not messing with us
   else {
@@ -46,13 +51,17 @@ router.post("/", auth.authenticateToken, async (req, res) => {
       }
       // else we know the user does exist,
       else {
-        // We will compare the hased password and the password that the user provided
-        if (await bcrypt.compare(user.password, sqlRes.rows[0].password)) {
-          // If true then we send back success
-          res.status(200).send({ detail: "Success" });
-        } else {
-          // else we know the passwords do not match
-          res.status(400).send({ detail: "Failiure" });
+        try {
+          // We will compare the hased password and the password that the user provided
+          if (await bcrypt.compare(user.password, sqlRes.rows[0].password)) {
+            // If true then we send back success
+            res.status(200).send({ detail: "Success" });
+          } else {
+            // else we know the passwords do not match
+            res.status(400).send({ detail: "Failiure" });
+          }
+        } catch {
+          res.status(500).send({ detail: "Unknown error " });
         }
       }
     });

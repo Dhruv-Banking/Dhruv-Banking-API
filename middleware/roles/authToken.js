@@ -8,7 +8,6 @@ function returnRole(token) {
 }
 
 // ------------------- GET ------------------- //
-
 function authRoleGetAllUsers(req, res, next) {
   var authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Spliting becase it goes: "Bearer [space] TOKEN"
