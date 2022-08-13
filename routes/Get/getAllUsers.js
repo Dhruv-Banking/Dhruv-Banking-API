@@ -5,7 +5,7 @@ const pool = require("../../database/pool"); // Pooling the connections to one p
 const auth = require("../../middleware/auth/auth"); // Authentication
 const verRole = require("../../middleware/roles/authToken");
 
-// This is the endpoint to delete a user, it takes 0 Parameters
+// This is the endpoint to get all the users, it takes 0 Parameters
 // instead it takes only a token.
 router.get("/", auth.authenticateToken, verRole.authRoleGetAllUsers, (req, res) => {
     // querying the database for all users
@@ -13,9 +13,10 @@ router.get("/", auth.authenticateToken, verRole.authRoleGetAllUsers, (req, res) 
         // If err, then throw an error, else we just send back the array
         if (err) {
             res.status(500).send({detail: err.stack});
-        } else {
-            res.send(sqlRes.rows);
+            return;
         }
+
+        res.send(sqlRes.rows);
     });
 });
 
