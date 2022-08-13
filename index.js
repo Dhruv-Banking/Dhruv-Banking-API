@@ -6,7 +6,7 @@ const rateLimiter = require("express-rate-limit");
 
 const limiter = rateLimiter({
   windowMs: 30 * 60 * 1000, // 30 Minutes
-  max: 300, // Max of 1 per second
+  max: 300, // Max of 300 every 30 minutes
   message: { detail: "You are being rate limited." },
 });
 
