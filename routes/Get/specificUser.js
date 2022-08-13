@@ -28,15 +28,20 @@ router.get("/", auth.authenticateToken, verRole.authGetRoleSpecificUsers, (req, 
     // Querying the database
     pool.query(query, values, (err, sqlRes) => {
         // If err, return an error
-        if (err) res.status(500).send({detail: err.stack});
-
+        if (err) {
+            res.status(500).send({detail: err.stack});
+            return;
+        }
         // If the returned rows is negative, then we know the user does not exist
-        else if (sqlRes.rowCount === 0) res.status(400).send({detail: "User does not exist"});
+        else if (sqlRes.rowCount === 0) {
+            res.status(400).send({detail: "User does not exist"});
+            return;
+        }
 
         // else we send back the data
-        else res.send(sqlRes.rows);
+        res.send(sqlRes.rows);
     });
 });
 
-// Exporting the module so we can use it from the main file
+// Exporting the module, so we can use it from the main file
 module.exports = router;
