@@ -7,23 +7,10 @@ const {v4: uuid4} = require("uuid"); // UUID maker
 const auth = require("../../middleware/auth/auth"); // Authentication
 const flagIP = require("../../middleware/flag-ip-address/flagIpAddress"); // Flagging the IP
 const authTokenPost = require("../../middleware/roles/postUserToken");
+const userClass = require("../../BaseClass/UserClass");
 
 // Allowing out app to use json in the request body
 router.use(express.json());
-
-class User {
-    constructor(username, firstname, lastname, email, password, role) {
-        this.uuid = uuid4(undefined, undefined, undefined);
-        this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.checkings = 0;
-        this.savings = 0;
-        this.role = role;
-    }
-}
 
 // This is the endpoint to post a user to the database
 // It takes 5 parameters:
@@ -32,7 +19,7 @@ class User {
 // @request.body.lastname
 // @request.body.email
 // @request.body.password
-// which are al provided in the request body.
+// which are all provided in the request body.
 router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, flagIP.flagIpAddress, async (req, res) => {
     // var to make the user body easier to read.
     const body = req.body;
@@ -41,7 +28,7 @@ router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, flagIP.
     let correctBody = true;
 
     // User object
-    let user = new User(body.username, body.firstname, body.lastname, body.email, body.password, "BASIC");
+    let user = new userClass(body.username, body.firstname, body.lastname, body.email, body.password, "BASIC", 0, 0);
 
     // Checking is any item in the user object is null, or empty
     for (let item in user) {
