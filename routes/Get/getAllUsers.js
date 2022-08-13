@@ -20,5 +20,5 @@ router.get("/", auth.authenticateToken, verRole.authRoleGetAllUsers, (req, res) 
     });
 });
 
-// Exporting the module so we can use it from the main file
+// Exporting the module, so we can use it from the main file
 module.exports = router;
