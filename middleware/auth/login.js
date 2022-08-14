@@ -44,8 +44,10 @@ router.post("/", async (req, res) => {
 
     // Here we are querying the database to get the use data
     pool.query(query, values, async (err, sqlRes) => {
-        if (err) res.status(500).send();
-        else if (sqlRes.rowCount === 0) {
+        if (err) {
+            res.status(500).send({detail: err.stack});
+            return;
+        } else if (sqlRes.rowCount === 0) {
             // Post user class.
             let postUser = new UserToken(req.body.name, roles.viewer, req.body.password);
             const accessToken = generateAccessTokenViewer(postUser.returnObject);
