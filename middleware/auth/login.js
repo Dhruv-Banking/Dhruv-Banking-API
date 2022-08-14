@@ -55,6 +55,7 @@ router.post("/", async (req, res) => {
 
         const sql = sqlRes.rows[0];
 
+        // OOP
         let user = new UserToken(sql.username, sql.role, sql.password);
 
         // If the hashed password, and the password requested are the same, then we return true
