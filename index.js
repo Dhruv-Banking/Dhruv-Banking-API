@@ -1,9 +1,11 @@
-const express = require("express");
-require("dotenv").config();
-const morgan = require("morgan");
-const cors = require("cors");
-const rateLimiter = require("express-rate-limit");
+// Imports
+const express = require("express"); // Express API
+require("dotenv").config(); // Dotenv load all the vars
+const morgan = require("morgan"); // Dev dependencies (Shows all the requests)
+const cors = require("cors"); // Cors so we can use it from the front-end js
+const rateLimiter = require("express-rate-limit"); // Rate limiter
 
+// limiter object
 const limiter = rateLimiter({
   windowMs: 30 * 60 * 1000, // 30 Minutes
   max: 300, // Max of 300 every 30 minutes
@@ -31,14 +33,14 @@ const updateUser = require("./routes/Put/updateUser");
 // PUT (Transfer Money)
 const checkingsToSavings = require("./routes/Put/TransferMoney/checkingsToSavings");
 const savingsToCheckings = require("./routes/Put/TransferMoney/savingsToCheckings");
-
 const transferToAnotherUser = require("./routes/Put/TransferMoney/toAnotherUser");
 
+// Express as an app var
 const app = express();
-app.use(express.json());
-app.use(morgan("dev"));
-app.use(cors());
-app.use(limiter);
+app.use(express.json()); // Lets us use json in the request body
+app.use(morgan("dev")); // Dev dependencies
+app.use(cors()); // All the endpoints have cors enabled
+app.use(limiter); // Limiter for all endpoints
 
 // Auth
 app.use("/users/login", login);
@@ -60,13 +62,14 @@ app.use("/updateUser", updateUser);
 // PUT (Transfer Money)
 app.use("/checkingsToSavings", checkingsToSavings);
 app.use("/savingsToCheckings", savingsToCheckings);
-
 app.use("/transferToAnotherUser", transferToAnotherUser);
 
+// Base Url
 app.get("/", auth.authenticateToken, (req, res) => {
   res.send({ detail: "Please pick an endpoint, refer to the docs" });
 });
 
+// Make the app listen on Port 3000
 app.listen(3000, () => {
   console.log("API listening on port " + 3000);
 });
