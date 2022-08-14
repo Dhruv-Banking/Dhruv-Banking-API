@@ -3,11 +3,10 @@ const express = require("express"); // Express as an API
 let router = express.Router(); // Router
 const bcrypt = require("bcrypt"); // Encryption
 const pool = require("../../database/pool"); // Pooling the connections to one pool
-const {v4: uuid4} = require("uuid"); // UUID maker
 const auth = require("../../middleware/auth/auth"); // Authentication
 const flagIP = require("../../middleware/flag-ip-address/flagIpAddress"); // Flagging the IP
 const authTokenPost = require("../../middleware/roles/postUserToken");
-const userClass = require("../../BaseClass/UserClass");
+const userClass = require("../../BaseClass/UserClass"); // User class
 
 // Allowing out app to use json in the request body
 router.use(express.json());
@@ -48,38 +47,37 @@ router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, flagIP.
         // If err, then we send an error
         if (err) {
             res.status(500).send({detail: err.stack});
+            return;
         }
         // else if user already exists, then we send an error
         else if (sqlRes.rows[0].exists === true) {
             res
                 .status(400)
                 .send({detail: `User with name '${user.username}' already exists`});
+            return;
         }
-        // else we know the user does not exist
-        else {
-            // If there were no previous errors, then we continue
-            if (correctBody) {
-                // Hash password since we know everything is fine
-                user.password = await bcrypt.hash(user.password, 12);
 
-                // Query, and values to post the user to the database
-                const query = "INSERT INTO users (uuid, username, firstname, lastname, email, password, savings, checkings, role) VALUES($1, $2, $3, $4, $5, $6, $7, $8 , $9)";
-                const values = [user.uuid, user.username, user.firstname, user.lastname, user.email, user.password, user.savings, user.checkings, user.role,];
+        // If there were no previous errors, then we continue
+        if (correctBody) {
+            // Hash password since we know everything is fine
+            user.password = await bcrypt.hash(user.password, 12);
 
-                // Here we are just posting the user to the database
-                pool.query(query, values, (err, sqlRes) => {
-                    // If error, then we send back the error
-                    if (err) {
-                        res.status(500).send({detail: err.stack});
-                    }
-                    // else we know the user does exist
-                    else {
-                        res.status(201).send({
-                            detail: `${user.username} has been succesfully created!`,
-                        });
-                    }
+            // Query, and values to post the user to the database
+            const query = "INSERT INTO users (uuid, username, firstname, lastname, email, password, savings, checkings, role) VALUES($1, $2, $3, $4, $5, $6, $7, $8 , $9)";
+            const values = [user.uuid, user.username, user.firstname, user.lastname, user.email, user.password, user.savings, user.checkings, user.role,];
+
+            // Here we are just posting the user to the database
+            pool.query(query, values, (err, sqlRes) => {
+                // If error, then we send back the error
+                if (err) {
+                    res.status(500).send({detail: err.stack});
+                    return;
+                }
+                // else we know the user does exist
+                res.status(201).send({
+                    detail: `${user.username} has been succesfully created!`,
                 });
-            }
+            });
         }
     });
 });
