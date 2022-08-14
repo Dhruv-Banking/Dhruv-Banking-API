@@ -31,6 +31,7 @@ router.put("/", auth.authenticateToken, verRole.checkingToSavings, async (req, r
         res.status(400).send({detail: "Can not accept money if it's less than 0"});
         return;
     }
+
     // check if the user exists query/values
     const existsQuery = "SELECT checkings, password FROM users WHERE username=$1";
     const existsValues = [username];
@@ -42,7 +43,7 @@ router.put("/", auth.authenticateToken, verRole.checkingToSavings, async (req, r
             res.status(500).send({detail: err.stack});
             return;
         } else if (sqlRes.rowCount === 0) {
-            // else if it retruns nothing, then we know the user does not exist.
+            // else if it returns nothing, then we know the user does not exist.
             res.status(400).send({detail: "Can not find user"});
             return;
         }
@@ -53,7 +54,6 @@ router.put("/", auth.authenticateToken, verRole.checkingToSavings, async (req, r
             return;
         }
 
-        // Here we are saving the amount of money in out checkings account to a var
         const checkingsAmount = sqlRes.rows[0].checkings;
 
         // checking is the amount is more than what we have in out checkings account
@@ -73,7 +73,6 @@ router.put("/", auth.authenticateToken, verRole.checkingToSavings, async (req, r
                 res.status(500).send({detail: "Unknown error with transferring money"});
                 return;
             }
-
             res.status(201).send({
                 detail: `Successfully transferred ${amount} from checkings to savings`,
             });
