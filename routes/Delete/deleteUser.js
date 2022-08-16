@@ -4,6 +4,7 @@ let router = express.Router(); // Router
 const pool = require("../../database/pool"); // Pooling the connections to one pool
 const auth = require("../../middleware/auth/auth"); // Authentication
 const bcrypt = require("bcrypt"); // Encryption
+const verRole = require("../../middleware/roles/authToken")
 
 // Allowing our app to use json in the request body
 router.use(express.json());
@@ -19,7 +20,7 @@ class deleteUser {
 // This is the endpoint to delete a user, it takes 2 Parameters:
 // @request.body.username, and the
 // @request.body.password, so we can authenticate if a user even wants to delete their account
-router.delete("/", auth.authenticateToken, async (req, res) => {
+router.delete("/", auth.authenticateToken, verRole.authGetRoleDeletUser, async (req, res) => {
     // This is the user object that was sent with the request body.
     let user = new deleteUser(req.query.username, req.body.password);
 
