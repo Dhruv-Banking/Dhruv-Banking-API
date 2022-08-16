@@ -78,6 +78,7 @@ function generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1d"});
 }
 
+// Generate viewer token.
 function generateAccessTokenViewer(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"});
 }
