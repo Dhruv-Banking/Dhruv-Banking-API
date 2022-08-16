@@ -15,7 +15,7 @@ router.use(express.json());
 // @request.body.userTo
 // @request.body.amount
 // @request.body.password
-router.put("/", auth.authenticateToken, verRole.toAnotherUser, (req, res) => {
+router.put("/", auth.authenticateToken, verRole.transferMoney, (req, res) => {
     const userFrom = req.query.userFrom;
     const userTo = req.body.userTo;
     const amount = req.body.amount;

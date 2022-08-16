@@ -14,7 +14,7 @@ router.use(express.json());
 // @request.query.username
 // @request.body.amount
 // @request.body.password
-router.put("/", auth.authenticateToken, verRole.checkingToSavings, async (req, res) => {
+router.put("/", auth.authenticateToken, verRole.transferMoney, async (req, res) => {
     // These are the variables from the request body/query
     const username = req.query.username;
     const amount = req.body.amount;
