@@ -53,7 +53,7 @@ function authGetRoleSpecificUsers(req, res, next) {
 // ------------------- DELETE ------------------- //
 function authGetRoleDeletUser(req, res, next) {
     let authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Spliting becase it goes: "Bearer [space] TOKEN"
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
     let username = req.query.username;
@@ -61,7 +61,7 @@ function authGetRoleDeletUser(req, res, next) {
     let role = returnRole(token);
 
 
-    if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.god) {
+    if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
         res.status(401);
         return res.send({detail: "You are not allowed to do this."});
     }
@@ -77,7 +77,7 @@ function authGetRoleDeletUser(req, res, next) {
 // ------------------- PUT ------------------- //
 function updateUser(req, res, next) {
     let authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Spliting becase it goes: "Bearer [space] TOKEN"
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
     let username = req.query.username;
@@ -100,7 +100,7 @@ function updateUser(req, res, next) {
 
 function transferMoney(req, res, next) {
     let authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Spliting becase it goes: "Bearer [space] TOKEN"
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
     let username = req.query.username;
@@ -121,7 +121,30 @@ function transferMoney(req, res, next) {
     next();
 }
 
+function authDhruvEndpoint(req, res, next) {
+    let authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
+    if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
+
+    let role = returnRole(token); // Role from token.
+
+    if (role !== roleData.dhruv) {
+        res.status(401);
+        return res.send({detail: "You are not allowed to do this, only the all powerful Dhruv is; skill issue ngl."});
+    }
+
+    const passwordBody = req.body.password;
+    const passwordEnv = process.env.SECRET_PASSWORD;
+
+    if (passwordBody !== passwordEnv) {
+        res.status(401);
+        return res.send({detail: "YOU MAY HAVE THE TOKEN. BUT DO YOU HAVE THE SECRET PASSWORD!?!?!?!?!??!"});
+    }
+
+    next();
+}
+
 // Exporting so we can use it from other files.
 module.exports = {
-    authRoleGetAllUsers, authGetRoleSpecificUsers, authGetRoleDeletUser, updateUser, transferMoney,
+    authRoleGetAllUsers, authGetRoleSpecificUsers, authGetRoleDeletUser, updateUser, transferMoney, authDhruvEndpoint,
 };
