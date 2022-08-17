@@ -6,7 +6,6 @@ const pool = require("../../database/pool"); // Pooling the connections to one p
 const auth = require("../../middleware/auth/auth"); // Authentication
 require("dotenv").config({path: "../../.env"}); // Dotenv, to read the .env file
 const verRole = require("../../middleware/roles/authToken");
-const authTokenAndUsername = require("../../middleware/roles/authTokenPostUser");
 
 // Allowing hte app to use json in the request body
 router.use(express.json());
@@ -16,7 +15,7 @@ router.use(express.json());
 // @request.query.username
 // @request.body.change
 // @request.body.changeTo
-router.put("/", auth.authenticateToken, verRole.updateUser, authTokenAndUsername.authUserPostUsername, (req, res) => {
+router.put("/", auth.authenticateToken, verRole.updateUser, (req, res) => {
     // Var so we don't have to type req.body every time
     const body = req.body;
 
