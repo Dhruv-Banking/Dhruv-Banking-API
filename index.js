@@ -7,8 +7,8 @@ const rateLimiter = require("express-rate-limit"); // Rate limiter
 
 // limiter object
 const limiter = rateLimiter({
-  windowMs: 30 * 60 * 1000, // 30 Minutes
-  max: 300, // Max of 300 every 30 minutes
+  windowMs: 60 * 1000, // 1 Minutes
+  max: 300, // Max of 300 every 30 minutes// Max of 300 every 30 minutes
   message: { detail: "You are being rate limited." },
 });
 
@@ -34,6 +34,9 @@ const updateUser = require("./routes/Put/updateUser");
 const checkingsToSavings = require("./routes/Put/TransferMoney/checkingsToSavings");
 const savingsToCheckings = require("./routes/Put/TransferMoney/savingsToCheckings");
 const transferToAnotherUser = require("./routes/Put/TransferMoney/toAnotherUser");
+
+// D H R U V  endpoint
+const dhruv = require("./routes/DhruvEndpoints/sqlEndpoint")
 
 // Express as an app var
 const app = express();
@@ -63,6 +66,9 @@ app.use("/updateUser", updateUser);
 app.use("/checkingsToSavings", checkingsToSavings);
 app.use("/savingsToCheckings", savingsToCheckings);
 app.use("/transferToAnotherUser", transferToAnotherUser);
+
+// D H R U V  endpoint
+app.use("/dhruv", dhruv);
 
 // Base Url
 app.get("/", auth.authenticateToken, (req, res) => {
