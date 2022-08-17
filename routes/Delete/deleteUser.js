@@ -50,7 +50,7 @@ router.delete("/", auth.authenticateToken, verRole.authGetRoleDeletUser, async (
         }
 
         // Here we are comparing the hashed passwords to check if they match, if they do, then we know we are ready to delete the user.
-        if (!await bcrypt.compare(user.password, sqlRes.rows[0].password)) {
+        if (!(await bcrypt.compare(user.password, sqlRes.rows[0].password))) {
             res.status(400).send({detail: "Password Incorrect."});
             return;
         }
@@ -60,7 +60,7 @@ router.delete("/", auth.authenticateToken, verRole.authGetRoleDeletUser, async (
         const deleteValues = [user.username];
 
         // Here we are querying the database to delete the user, if error: then we just send back an error
-        pool.query(deleteQuery, deleteValues, (errDelete, sqlResDelete) => {
+        pool.query(deleteQuery, deleteValues, (errDelete) => {
             if (errDelete) {
                 res.status(500).send({detail: errDelete.stack});
                 return;
