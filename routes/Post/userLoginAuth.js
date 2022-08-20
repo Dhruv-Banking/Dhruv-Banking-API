@@ -9,6 +9,13 @@ const auth = require("../../middleware/auth/auth"); // Authentication
 // Allowing out app to use json in the request body
 router.use(express.json());
 
+class User {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+    }
+}
+
 // This is the endpoint to authenticate a user that has logged in
 // It takes 2 parameters:
 // @request.body.username
@@ -18,49 +25,40 @@ router.post("/", auth.authenticateToken, async (req, res) => {
     const body = req.body;
 
     // USer object
-    const user = {
-        username: body.username, // Username
-        password: body.password, // Password
-    };
+    const user = new User(body.username, body.password)
 
     // Queries to select
     const query = "SELECT username, password FROM users WHERE username=$1";
     const values = [user.username];
 
-    // checking if the username is null, or undefinded
-    if (user.username === undefined || user.username === null || user.password === undefined || user.password === null) {
-        // if so, then we send an error
-        res.status(400).send({detail: "Provide Username or Password."});
+    for (let item in user) {
+        if (user[item] === "" || user[item] === undefined) {
+            res.status(400).send({detail: "Please provide all items."});
+            return;
+        }
     }
+
     // else we know the caller is not messing with us
-    else {
-        // Querying the database to get the username, and password
-        pool.query(query, values, async (err, sqlRes) => {
-            // If err, then we send an error, and the error
-            if (err) {
-                res.status(500).send({detail: err.stack});
-            }
-            // else if the databse returns nothing
-            else if (sqlRes.rowCount === 0) {
-                res.status(400).send({detail: "Incorrect username."});
-            }
-            // else we know the user does exist,
-            else {
-                try {
-                    // We will compare the hased password and the password that the user provided
-                    if (await bcrypt.compare(user.password, sqlRes.rows[0].password)) {
-                        // If true then we send back success
-                        res.status(200).send({detail: "Success"});
-                    } else {
-                        // else we know the passwords do not match
-                        res.status(400).send({detail: "Failiure"});
-                    }
-                } catch {
-                    res.status(500).send({detail: "Unknown error "});
-                }
-            }
-        });
-    }
+    // Querying the database to get the username, and password
+    pool.query(query, values, async (err, sqlRes) => {
+        // If err, then we send an error, and the error
+        if (err) {
+            res.status(500).send({detail: err.stack});
+            return;
+        }
+        // else if the database returns nothing
+        else if (sqlRes.rowCount === 0) {
+            res.status(400).send({detail: "User does not exist."});
+            return;
+        }
+        // We will compare the hashed password and the password that the user provided
+        if (!(await bcrypt.compare(user.password, sqlRes.rows[0].password))) {
+            res.status(400).send({detail: "Failure"});
+            return;
+        }
+
+        res.status(200).send({detail: "Success"});
+    });
 });
 
 // Exporting the module so we can use it from the main file
