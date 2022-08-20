@@ -51,6 +51,7 @@ router.post("/", auth.authenticateToken, async (req, res) => {
             res.status(400).send({detail: "User does not exist."});
             return;
         }
+
         // We will compare the hashed password and the password that the user provided
         if (!(await bcrypt.compare(user.password, sqlRes.rows[0].password))) {
             res.status(400).send({detail: "Failure"});
