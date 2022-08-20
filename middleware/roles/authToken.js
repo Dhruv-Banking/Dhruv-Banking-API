@@ -1,4 +1,4 @@
-// JSW as an import
+// JWT as an import
 const jwt = require("jsonwebtoken");
 const roleData = require("./roleData"); // Importing the secret role data
 
@@ -39,15 +39,19 @@ function authGetRoleSpecificUsers(req, res, next) {
     // Check if token username is equal to the username in the query.
     if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
         res.status(401);
-        return res.send({detail: "You don't have the right role"})
+        return res.send({detail: "You don't have the right role"});
     }
 
     if (username !== tokenName) {
-        res.status(400);
-        return res.send({detail: "Please use the same token as the user"});
+        if (role === roleData.dhruv || role === roleData.god) {
+            next()
+        } else {
+            res.status(403);
+            return res.send({detail: "Please use the same token as the user"});
+        }
+    } else {
+        next();
     }
-
-    next();
 }
 
 // ------------------- DELETE ------------------- //
@@ -85,12 +89,15 @@ function updateUser(req, res, next) {
     let role = returnRole(token);
 
 
-    if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.god) {
+    if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
         res.status(401);
         return res.send({detail: "You are not allowed to do this."});
     }
 
     if (username !== tokenName) {
+        if (role === roleData.dhruv) {
+            next();
+        }
         res.status(400);
         return res.send({detail: "Please use the same token as the user"});
     }

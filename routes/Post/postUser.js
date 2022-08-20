@@ -32,7 +32,7 @@ router.use(express.json());
 // @request.body.email
 // @request.body.password
 // which are all provided in the request body.
-router.post("/",  (req, res) => {
+router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, flagIP.flagIpAddress, (req, res) => {
     // var to make the user body easier to read.
     const body = req.body;
 
@@ -53,7 +53,6 @@ router.post("/",  (req, res) => {
             return;
         }
     }
-
 
     // Query to check if a user with that username exists
     const existsQuery = "SELECT EXISTS(SELECT * from users WHERE username=$1);";
