@@ -119,8 +119,7 @@ const welcomeHtml = `<!DOCTYPE html>
           opacity: 0;
         "
       >
-        A preheader is the short summary text that follows the subject line when
-        an email is viewed in the inbox.
+        Thank you so much for signing up to Dhruv Banking!
       </div>
       <!-- end preheader -->
   
