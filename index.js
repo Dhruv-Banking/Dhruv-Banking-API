@@ -75,7 +75,10 @@ app.get("/", auth.authenticateToken, (req, res) => {
   res.send({ detail: "Please pick an endpoint, refer to the docs" });
 });
 
+// Port var
+let port = process.env.PORT || 3000;
+
 // Make the app listen on Port 3000
-app.listen(3000, () => {
-  console.log("API listening on port " + 3000);
+app.listen(port, () => {
+  console.log("API listening on port " + port);
 });
