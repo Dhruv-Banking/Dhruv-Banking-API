@@ -110,7 +110,7 @@ function transferMoney(req, res, next) {
     const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
-    let username = req.query.username;
+    let username = req.query.username || req.query.userFrom;
     let tokenName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
     let role = returnRole(token);
 
