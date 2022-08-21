@@ -115,7 +115,7 @@ function transferMoney(req, res, next) {
     let role = returnRole(token);
 
 
-    if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.god) {
+    if (role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
         res.status(401);
         return res.send({detail: "You are not allowed to do this."});
     }
