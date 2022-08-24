@@ -10,7 +10,7 @@ function flagIpAddress(req, res, next) {
     // check to see if the ip exists.
     pool.query(query, values, (err, sqlres) => {
         if (err) {
-            res.staus(500);
+            res.status(500);
             return res.send({detail: "Internal Server Error"});
         } else if (sqlres.rowCount === 0) {
             // else if they don't exist, then we just add them
