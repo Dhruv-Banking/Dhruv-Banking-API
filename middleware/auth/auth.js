@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 // Middleware function to authenticate the token that was sent in the request headers
 function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Spliting becase it goes: "Bearer [space] TOKEN"
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
     // Verify the token
@@ -17,5 +17,5 @@ function authenticateToken(req, res, next) {
     });
 }
 
-// Exporting this so we can use it in any file.
+// Exporting this, so we can use it in any file.
 module.exports = {authenticateToken};
