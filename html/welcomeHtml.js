@@ -252,7 +252,7 @@ const welcomeHtml = `<!DOCTYPE html>
                           <tr>
                             <td align="center" style="border-radius: 6px">
                               <a
-                                href="https://sendgrid.com"
+                                href="https://front-end-flask.vercel.app/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style="
