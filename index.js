@@ -35,6 +35,10 @@ const checkingsToSavings = require("./routes/Put/TransferMoney/checkingsToSaving
 const savingsToCheckings = require("./routes/Put/TransferMoney/savingsToCheckings");
 const transferToAnotherUser = require("./routes/Put/TransferMoney/toAnotherUser");
 
+// PUT (Reset password)
+const resetPasswordEmail = require("./routes/Put/resetPasswordEmail")
+const resetPasswordEndpoint = require("./routes/Put/resetPassword")
+
 // D H R U V  endpoint
 const dhruv = require("./routes/DhruvEndpoints/sqlEndpoint")
 
@@ -66,6 +70,10 @@ app.use("/updateUser", updateUser);
 app.use("/checkingsToSavings", checkingsToSavings);
 app.use("/savingsToCheckings", savingsToCheckings);
 app.use("/transferToAnotherUser", transferToAnotherUser);
+
+// PUT (Reset password)
+app.use("/resetPasswordEmail", resetPasswordEmail);
+app.use("/resetPassword", resetPasswordEndpoint);
 
 // D H R U V  endpoint
 app.use("/dhruv", dhruv);
