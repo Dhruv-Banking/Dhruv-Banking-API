@@ -235,7 +235,7 @@ let resetHtml = `<!DOCTYPE html>
                     Reset Password:
                   </h1>
                   <p style="margin: 0">
-                    Imagine needing to reset your password. Either use the button below, or use the rest token. Your token: user.token.
+                    Imagine needing to reset your password. Either use the button below, or use the rest token (Reset token lasts 15 minutes, be fast or else.). Your token:   user.token
                   </p>
                 </td>
               </tr>
@@ -251,7 +251,7 @@ let resetHtml = `<!DOCTYPE html>
                           <tr>
                             <td align="center" style="border-radius: 6px">
                               <a
-                                href=""
+                                href="https://front-end-flask.vercel.app/reset?token=user.token"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style="

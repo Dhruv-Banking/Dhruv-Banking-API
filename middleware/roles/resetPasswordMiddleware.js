@@ -20,6 +20,7 @@ function authRoleAndUsername(req, res, next) {
 
         // Get role and check if it's correct.
         let role = returnRoletoken(token);
+
         if (role !== roleData.reset && role !== roleData.dhruv && role !== roleData.god) {
             return res.status(403).send({detail: "You do not have the right role."});
         }

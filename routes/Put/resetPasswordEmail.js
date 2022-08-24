@@ -2,7 +2,6 @@
 const express = require("express"); // express as API
 let router = express.Router(); // Router
 const pool = require("../../database/pool"); // Pooling the connections to one pool
-const auth = require("../../middleware/auth/auth"); // Authentication
 const nodemailer = require("nodemailer");
 const resetHtml = require("../../html/resetHtml")
 const jwt = require("jsonwebtoken");
@@ -35,7 +34,7 @@ class User {
     }
 }
 
-router.put("/", auth.authenticateToken, async (req, res) => {
+router.put("/", async (req, res) => {
     // Create user const's.
     const username = req.query.username;
     let user1 = new User(username, roleData.reset);
@@ -69,7 +68,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
             from: process.env.EMAIL,
             to: email,
             subject: "Reset Password",
-            html: resetHtml.replace("user.token", token),
+            html: resetHtml.replace("user.token", token).replace("user.token", token),
         };
 
         transporter.sendMail(mailOptions, (err, success) => {
@@ -84,7 +83,7 @@ router.put("/", auth.authenticateToken, async (req, res) => {
 
 // Generate a reset token
 function generateTokenReset(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1d"});
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"});
 }
 
 

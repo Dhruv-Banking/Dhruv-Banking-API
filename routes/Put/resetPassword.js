@@ -4,6 +4,7 @@ let router = express.Router(); // Router
 const pool = require("../../database/pool"); // Pooling the connections to one pool
 const bcrypt = require("bcrypt");
 const authTokenAndName = require("../../middleware/roles/resetPasswordMiddleware")
+const jwt = require("jsonwebtoken");
 
 router.use(express.json());
 
@@ -14,11 +15,20 @@ class User {
     }
 }
 
+function returnName(token) {
+    let decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    return decoded.username;
+}
+
 router.put("/", authTokenAndName.authRoleAndUsername, async (req, res) => {
-    const username = req.query.username;
+    let authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
+
+    const username = returnName(token);
     const newPassword = req.body.newPassword;
 
     const resetUserPass = new User(username, newPassword);
+
 
     // Checking is any item in the user object is null, or empty
     for (let item in resetUserPass) {
