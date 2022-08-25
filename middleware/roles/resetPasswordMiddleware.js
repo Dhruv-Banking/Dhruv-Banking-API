@@ -14,7 +14,7 @@ function authRoleAndUsername(req, res, next) {
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
     // Verify Function.
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
         if (err) return res.status(403).json({result: "Forbidden"});
 
 
