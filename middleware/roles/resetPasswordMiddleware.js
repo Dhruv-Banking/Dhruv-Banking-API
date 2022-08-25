@@ -15,7 +15,7 @@ function authRoleAndUsername(req, res, next) {
 
     // Verify Function.
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
-        if (err) return res.status(403).json({result: "Forbidden"});
+        if (err) return res.status(403).json({result: "Forbidden"})
 
 
         // Get role and check if it's correct.
