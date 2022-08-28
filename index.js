@@ -8,7 +8,7 @@ const rateLimiter = require("express-rate-limit"); // Rate limiter
 // limiter object
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 Minutes
-  max: 300, // Max of 300 every 30 minutes// Max of 300 every 30 minutes
+  max: 300, // Max of 300 every 30 minutes
   message: { detail: "You are being rate limited." },
 });
 
@@ -19,6 +19,9 @@ const auth = require("./middleware/auth/auth");
 // POST user Route
 const postUser = require("./routes/Post/postUser");
 const authUserLogin = require("./routes/Post/userLoginAuth");
+
+// Auth user email
+const verifyEmail = require("./routes/Post/verifyEmail");
 
 // GET
 const getAllUsers = require("./routes/Get/getAllUsers");
@@ -55,6 +58,9 @@ app.use("/users/login", login);
 // POST
 app.use("/postUser", postUser);
 app.use("/authUserLogin", authUserLogin);
+
+// Auth user email
+app.use("/verifyUserEmail", verifyEmail)
 
 // GET
 app.use("/getAllUsers", getAllUsers);

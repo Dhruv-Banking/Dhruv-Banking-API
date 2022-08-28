@@ -235,7 +235,7 @@ const verifyEmailHtml = `<!DOCTYPE html>
                     Verify Email:
                   </h1>
                   <p style="margin: 0">
-                    Please click the button below to verify your email.
+                    Please click the button below to verify your email. Here is your token: user.token
                   </p>
                 </td>
               </tr>
