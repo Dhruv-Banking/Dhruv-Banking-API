@@ -35,7 +35,7 @@ router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, (req, r
     const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
     if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
-    let  data = decryptToken(token);
+    let data = decryptToken(token);
 
     // User object
     let user = new userClass(data.uuid, data.username, data.firstname, data.lastname, data.email, data.password, roleData.basic, data.checkings, data.savings);

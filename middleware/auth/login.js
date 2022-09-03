@@ -48,11 +48,7 @@ router.post("/", async (req, res) => {
             res.status(500).send({detail: err.stack});
             return;
         } else if (sqlRes.rowCount === 0) {
-            // Post user class.
-            let postUser = new UserToken(req.body.name, roles.viewer, req.body.password);
-            const accessToken = generateAccessTokenViewer(postUser.returnObject);
-
-            return res.send({postUserToken: accessToken});
+            res.status(500).send({detail: "User does not exist."})
         }
 
         const sql = sqlRes.rows[0];
@@ -76,11 +72,6 @@ router.post("/", async (req, res) => {
 // Function to generate the access token.
 function generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1d"});
-}
-
-// Generate viewer token.
-function generateAccessTokenViewer(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"});
 }
 
 module.exports = router;

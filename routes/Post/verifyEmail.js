@@ -34,7 +34,7 @@ router.use(express.json());
 // @request.body.email
 // @request.body.password
 // which are all provided in the request body.
-router.post("/", auth.authenticateToken, authTokenPost.verifyRolePostUser, async (req, res) => {
+router.post("/", async (req, res) => {
     // var to make the user body easier to read.
     const body = req.body;
 
