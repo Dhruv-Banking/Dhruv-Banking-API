@@ -17,7 +17,23 @@ function authRolePostUser(req, res, next) {
     let role = returnRole(token);
 
     // Verifying the role to make sure
-    if (role !== roleData.viewer && role !== roleData.basic && role !== roleData.admin && role !== roleData.god) {
+    if (role !== roleData.verifyEmail && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
+        res.status(500);
+        return res.send({detail: "ice ice baby"});
+    }
+
+    next();
+}
+
+function verifyRolePostUser(req, res, next) {
+    let authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
+    if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
+
+    let role = returnRole(token);
+
+    // Verify the role
+    if (role !== roleData.viewer && role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
         res.status(500);
         return res.send({detail: "You do not have the right role."});
     }
@@ -26,5 +42,6 @@ function authRolePostUser(req, res, next) {
 }
 
 module.exports = {
+    verifyRolePostUser,
     authRolePostUser,
 };

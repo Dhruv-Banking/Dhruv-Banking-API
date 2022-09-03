@@ -70,11 +70,6 @@ function authGetRoleDeletUser(req, res, next) {
         return res.send({detail: "You are not allowed to do this."});
     }
 
-    if (username !== tokenName) {
-        res.status(400);
-        return res.send({detail: "Please use the same token as the user"});
-    }
-
     next();
 }
 

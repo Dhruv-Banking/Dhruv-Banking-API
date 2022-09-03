@@ -8,7 +8,7 @@ const rateLimiter = require("express-rate-limit"); // Rate limiter
 // limiter object
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 Minutes
-  max: 300, // Max of 300 every 30 minutes
+  max: 300, // Max of 300 every 1 minutes
   message: { detail: "You are being rate limited." },
 });
 
@@ -39,11 +39,11 @@ const savingsToCheckings = require("./routes/Put/TransferMoney/savingsToChecking
 const transferToAnotherUser = require("./routes/Put/TransferMoney/toAnotherUser");
 
 // PUT (Reset password)
-const resetPasswordEmail = require("./routes/Put/resetPasswordEmail")
-const resetPasswordEndpoint = require("./routes/Put/resetPassword")
+const resetPasswordEmail = require("./routes/Put/resetPasswordEmail");
+const resetPasswordEndpoint = require("./routes/Put/resetPassword");
 
 // D H R U V  endpoint
-const dhruv = require("./routes/DhruvEndpoints/sqlEndpoint")
+const dhruv = require("./routes/DhruvEndpoints/sqlEndpoint");
 
 // Express as an app var
 const app = express();

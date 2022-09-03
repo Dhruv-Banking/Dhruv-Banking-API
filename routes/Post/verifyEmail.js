@@ -10,6 +10,7 @@ const {v4: uuid4} = require("uuid");
 const jwt = require("jsonwebtoken");
 const roleData = require("../../middleware/roles/roleData");
 const verifyEmailHtml = require("../../html/verifyHtml");
+const bcrypt = require("bcrypt"); // Encryption
 
 let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -33,12 +34,14 @@ router.use(express.json());
 // @request.body.email
 // @request.body.password
 // which are all provided in the request body.
-router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, (req, res) => {
+router.post("/", auth.authenticateToken, authTokenPost.verifyRolePostUser, async (req, res) => {
     // var to make the user body easier to read.
     const body = req.body;
 
     // User object
-    let user = new userClass(uuid4(undefined, undefined, undefined), body.username, body.firstname, body.lastname, body.email, body.password, roleData.verifyEmail, 0, 0);
+    let hashedPassword = await bcrypt.hash(body.password, 12);
+
+    let user = new userClass(uuid4(undefined, undefined, undefined), body.username, body.firstname, body.lastname, body.email, hashedPassword, roleData.verifyEmail, 0, 0);
 
     // Checking is any item in the user object is null, or empty
     for (let item in user) {
