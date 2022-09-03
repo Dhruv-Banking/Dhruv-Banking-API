@@ -235,7 +235,7 @@ const verifyEmailHtml = `<!DOCTYPE html>
                     Verify Email:
                   </h1>
                   <p style="margin: 0">
-                    Please click the button below to verify your email. Here is your token: user.token
+                    Please click the button below to verify your email,
                   </p>
                 </td>
               </tr>
@@ -251,7 +251,7 @@ const verifyEmailHtml = `<!DOCTYPE html>
                           <tr>
                             <td align="center" style="border-radius: 6px">
                               <a
-                                href=""
+                                href="http://127.0.0.1:5000/verifyEmail?token=user.token"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style="
