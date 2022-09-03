@@ -98,7 +98,7 @@ router.post("/", auth.authenticateToken, authTokenPost.authRolePostUser, (req, r
 
             // else we know the user does exist
             res.status(201).send({
-                detail: `${user.username} has been successfully created!`,
+                detail: `user has been successfully created!`,
             });
         });
     });
