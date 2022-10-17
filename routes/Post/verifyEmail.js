@@ -5,7 +5,6 @@ const auth = require("../../middleware/auth/auth"); // Authentication
 const authTokenPost = require("../../middleware/roles/postUserToken");
 const userClass = require("../../BaseClass/UserClass"); // User class
 const nodemailer = require("nodemailer");
-const html = require("../../html/welcomeHtml")
 const {v4: uuid4} = require("uuid");
 const jwt = require("jsonwebtoken");
 const roleData = require("../../middleware/roles/roleData");
@@ -38,16 +37,13 @@ router.post("/", async (req, res) => {
     // var to make the user body easier to read.
     const body = req.body;
 
-    // User object
-    let hashedPassword = await bcrypt.hash(body.password, 12);
-
-    let user = new userClass(uuid4(undefined, undefined, undefined), body.username, body.firstname, body.lastname, body.email, hashedPassword, roleData.verifyEmail, 0, 0);
+    // user obj
+    let user = new userClass(uuid4(undefined, undefined, undefined), body.username, body.firstname, body.lastname, body.email, await bcrypt.hash(body.password, 12), roleData.verifyEmail, 0, 0);
 
     // Checking is any item in the user object is null, or empty
     for (let item in user) {
         if ((user[item] === "" || user[item] === undefined)) {
-            res.status(400).send({detail: "Please provide all items."});
-            return;
+            return res.status(400).send({detail: "Please provide all items."});
         }
     }
 
@@ -67,7 +63,7 @@ router.post("/", async (req, res) => {
         }
     })
 
-    res.send({detail: "Successfully sent email, please check your inbox to verify your email."})
+    res.status(200).send({detail: "Successfully sent email, please check your inbox to verify your email."});
 });
 
 function createNewPostUserToken(user) {

@@ -251,7 +251,7 @@ const verifyEmailHtml = `<!DOCTYPE html>
                           <tr>
                             <td align="center" style="border-radius: 6px">
                               <a
-                                href="https://front-end-flask.vercel.app/verifyEmail?token=user.token"
+                                href="http://127.0.0.1:5000/verifyEmail?token=user.token"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style="
