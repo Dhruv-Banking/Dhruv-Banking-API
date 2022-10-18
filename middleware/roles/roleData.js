@@ -5,7 +5,7 @@ const roles = {
   basic: "BASIC",
   viewer: "VIEWER",
   reset: "RESET",
-  verifyEmail: "VERIFY"
+  verifyEmail: "VERIFY",
 };
 
 module.exports = roles;

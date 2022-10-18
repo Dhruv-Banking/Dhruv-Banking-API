@@ -3,45 +3,56 @@ const jwt = require("jsonwebtoken");
 const roleData = require("./roleData"); // Importing the secret role data
 
 function returnRole(token) {
-    let decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    return decoded.role;
+  let decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  return decoded.role;
 }
 
 // ------------------- POST ------------------- //
 function authRolePostUser(req, res, next) {
-    let authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
-    if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
+  let authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
+  if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
-    // Saving the returned role to the var role
-    let role = returnRole(token);
+  // Saving the returned role to the var role
+  let role = returnRole(token);
 
-    // Verifying the role to make sure
-    if (role !== roleData.verifyEmail && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
-        res.status(500);
-        return res.send({detail: "ice ice baby"});
-    }
+  // Verifying the role to make sure
+  if (
+    role !== roleData.verifyEmail &&
+    role !== roleData.admin &&
+    role !== roleData.god &&
+    role !== roleData.dhruv
+  ) {
+    res.status(500);
+    return res.send({ detail: "ice ice baby" });
+  }
 
-    next();
+  next();
 }
 
 function verifyRolePostUser(req, res, next) {
-    let authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
-    if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
+  let authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
+  if (token === null) return res.sendStatus(401); // If the token sent is null, then we know there is no token to be verified
 
-    let role = returnRole(token);
+  let role = returnRole(token);
 
-    // Verify the role
-    if (role !== roleData.viewer && role !== roleData.basic && role !== roleData.admin && role !== roleData.god && role !== roleData.dhruv) {
-        res.status(500);
-        return res.send({detail: "You do not have the right role."});
-    }
+  // Verify the role
+  if (
+    role !== roleData.viewer &&
+    role !== roleData.basic &&
+    role !== roleData.admin &&
+    role !== roleData.god &&
+    role !== roleData.dhruv
+  ) {
+    res.status(500);
+    return res.send({ detail: "You do not have the right role." });
+  }
 
-    next();
+  next();
 }
 
 module.exports = {
-    verifyRolePostUser,
-    authRolePostUser,
+  verifyRolePostUser,
+  authRolePostUser,
 };

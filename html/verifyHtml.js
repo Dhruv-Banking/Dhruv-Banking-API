@@ -353,6 +353,6 @@ const verifyEmailHtml = `<!DOCTYPE html>
       </table>
       <!-- end body -->
     </body>
-  </html>`
+  </html>`;
 
 module.exports = verifyEmailHtml;

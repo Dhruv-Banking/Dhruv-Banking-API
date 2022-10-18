@@ -355,6 +355,6 @@ const welcomeHtml = `<!DOCTYPE html>
       </table>
       <!-- end body -->
     </body>
-  </html>`
+  </html>`;
 
 module.exports = welcomeHtml;

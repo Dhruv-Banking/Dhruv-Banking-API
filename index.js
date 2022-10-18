@@ -60,7 +60,7 @@ app.use("/postUser", postUser);
 app.use("/authUserLogin", authUserLogin);
 
 // Auth user email
-app.use("/verifyUserEmail", verifyEmail)
+app.use("/verifyUserEmail", verifyEmail);
 
 // GET
 app.use("/getAllUsers", getAllUsers);
