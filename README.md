@@ -43,7 +43,7 @@ $ node
 
 Your directory should look something like this, but there should be a `node_modules` directory:
 
-<img src="src/images/Dir__Tree.png" alt="Tree of the current directory" title="Tree of the current directory">
+<img src="src/core/images/Dir__Tree.png" alt="Tree of the current directory" title="Tree of the current directory">
 
 ---
 

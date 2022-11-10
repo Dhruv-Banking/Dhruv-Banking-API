@@ -3,7 +3,7 @@ const express = require("express"); // express as API
 let router = express.Router(); // Router
 const pool = require("../../database/pool"); // Pooling the connections to one pool
 const nodemailer = require("nodemailer");
-const resetHtml = require("../../html/resetHtml");
+const resetHtml = require("../../core/html/resetHtml");
 const jwt = require("jsonwebtoken");
 const roleData = require("../../middleware/roles/roleData");
 

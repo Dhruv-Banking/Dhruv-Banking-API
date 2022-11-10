@@ -5,9 +5,9 @@ const pool = require("../../database/pool"); // Pooling the connections to one p
 const flagIP = require("../../middleware/flag-ip-address/flagIpAddress"); // Flagging the IP
 const auth = require("../../middleware/auth/auth"); // Authentication
 const authTokenPost = require("../../middleware/roles/postUserToken");
-const userClass = require("../../BaseClass/UserClass"); // User class
+const userClass = require("../../core/baseclass/UserClass"); // User class
 const nodemailer = require("nodemailer");
-const html = require("../../html/welcomeHtml");
+const html = require("../../core/html/welcomeHtml");
 const jwt = require("jsonwebtoken");
 const roleData = require("../../middleware/roles/roleData");
 

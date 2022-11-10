@@ -3,12 +3,12 @@ const express = require("express"); // Express as an API
 let router = express.Router(); // Router
 const auth = require("../../middleware/auth/auth"); // Authentication
 const authTokenPost = require("../../middleware/roles/postUserToken");
-const userClass = require("../../BaseClass/UserClass"); // User class
+const userClass = require("../../core/baseclass/UserClass"); // User class
 const nodemailer = require("nodemailer");
 const { v4: uuid4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const roleData = require("../../middleware/roles/roleData");
-const verifyEmailHtml = require("../../html/verifyHtml");
+const verifyEmailHtml = require("../../core/html/verifyHtml");
 const bcrypt = require("bcrypt"); // Encryption
 
 let transporter = nodemailer.createTransport({
@@ -81,7 +81,7 @@ router.post("/", async (req, res) => {
   });
 });
 
-function createNewPostUserToken(user) {nessesary
+function createNewPostUserToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 }
 
