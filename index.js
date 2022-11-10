@@ -89,6 +89,11 @@ app.get("/", auth.authenticateToken, (req, res) => {
   res.send({ detail: "Please pick an endpoint, refer to the docs" });
 });
 
+// Fallback
+app.get("*", (req, res) => {
+  res.send({ detail: "This endpoint does not exist, please pick one that does"})
+});
+
 // Port var
 let port = process.env.PORT || 3000;
 

@@ -62,6 +62,7 @@ router.post("/", async (req, res) => {
     // Generate the access token
     const accessToken = generateAccessToken(user.returnObject);
 
+    console.log("created user with token: " + user.role)
     // Then we send back the access token.
     res.send({ accessToken: accessToken });
   });
