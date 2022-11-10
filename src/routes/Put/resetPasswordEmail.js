@@ -77,7 +77,7 @@ router.put("/", async (req, res) => {
           .status(500)
           .send({
             detail: "Unable to send email.",
-            error: { get: "good nlg" },
+            error: { info: "get good nlg" },
           });
       } else {
         return res

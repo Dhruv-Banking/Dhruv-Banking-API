@@ -5,6 +5,7 @@ const pool = require("../../database/pool"); // Pooling the connections to one p
 const bcrypt = require("bcrypt");
 const authTokenAndName = require("../../middleware/roles/resetPasswordMiddleware");
 const jwt = require("jsonwebtoken");
+const roleData = require("../../middleware/roles/roleData")
 
 router.use(express.json());
 
@@ -20,9 +21,18 @@ function returnName(token) {
   return decoded.username;
 }
 
+function returnRole(token) {
+  let decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  return decoded.role;
+}
+
 router.put("/", authTokenAndName.authRoleAndUsername, async (req, res) => {
   let authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
+
+  if (returnRole(token) !== roleData.reset) {
+    return res.status(400).send({detail: "Wrong role on token"})
+  }
 
   const username = returnName(token);
   const newPassword = req.body.newPassword;

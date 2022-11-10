@@ -81,7 +81,7 @@ router.post("/", async (req, res) => {
   });
 });
 
-function createNewPostUserToken(user) {
+function createNewPostUserToken(user) {nessesary
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 }
 
