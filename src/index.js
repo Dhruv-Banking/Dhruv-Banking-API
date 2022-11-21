@@ -5,6 +5,7 @@ const morgan = require("morgan"); // Dev dependencies (Shows all the requests)
 const cors = require("cors"); // Cors so we can use it from the front-end js
 const rateLimiter = require("express-rate-limit"); // Rate limiter
 
+
 // limiter object
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 Minutes
