@@ -14,37 +14,37 @@ const limiter = rateLimiter({
 });
 
 // Auth Route
-const login = require("./middleware/auth/login");
-const auth = require("./middleware/auth/auth");
+const login = require("./src/middleware/auth/login");
+const auth = require("./src/middleware/auth/auth");
 
 // POST user Route
-const postUser = require("./routes/Post/postUser");
-const authUserLogin = require("./routes/Post/userLoginAuth");
+const postUser = require("./src/routes/Post/postUser");
+const authUserLogin = require("./src/routes/Post/userLoginAuth");
 
 // Auth user email
-const verifyEmail = require("./routes/Post/verifyEmail");
+const verifyEmail = require("./src/routes/Post/verifyEmail");
 
 // GET
-const getAllUsers = require("./routes/Get/getAllUsers");
-const specificUser = require("./routes/Get/specificUser");
+const getAllUsers = require("./src/routes/Get/getAllUsers");
+const specificUser = require("./src/routes/Get/specificUser");
 
 // Delete
-const deleteUser = require("./routes/Delete/deleteUser");
+const deleteUser = require("./src/routes/Delete/deleteUser");
 
 // PUT
-const updateUser = require("./routes/Put/updateUser");
+const updateUser = require("./src/routes/Put/updateUser");
 
 // PUT (Transfer Money)
-const checkingsToSavings = require("./routes/Put/TransferMoney/checkingsToSavings");
-const savingsToCheckings = require("./routes/Put/TransferMoney/savingsToCheckings");
-const transferToAnotherUser = require("./routes/Put/TransferMoney/toAnotherUser");
+const checkingsToSavings = require("./src/routes/Put/TransferMoney/checkingsToSavings");
+const savingsToCheckings = require("./src/routes/Put/TransferMoney/savingsToCheckings");
+const transferToAnotherUser = require("./src/routes/Put/TransferMoney/toAnotherUser");
 
 // PUT (Reset password)
-const resetPasswordEmail = require("./routes/Put/resetPasswordEmail");
-const resetPasswordEndpoint = require("./routes/Put/resetPassword");
+const resetPasswordEmail = require("./src/routes/Put/resetPasswordEmail");
+const resetPasswordEndpoint = require("./src/routes/Put/resetPassword");
 
 // D H R U V  endpoint
-const dhruv = require("./routes/DhruvEndpoints/sqlEndpoint");
+const dhruv = require("./src/routes/DhruvEndpoints/sqlEndpoint");
 
 // Express as an app var
 const app = express();
