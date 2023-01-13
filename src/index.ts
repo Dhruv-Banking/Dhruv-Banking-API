@@ -10,11 +10,19 @@ const port = 3000;
 const getSpecificUser = require("./routes/get/getSpecificUser");
 const getAllUsers = require("./routes/get/getAllUsers");
 
+// Routes -- POST
+const verifyEmail = require("./routes/post/postUser/verifyEmail");
+
 // ------------------------------- //
 
 // Use Routes -- GET
-app.use("/dhruvbanking/api/get/getSpecificUser", getSpecificUser);
-app.use("/dhruvbanking/api/get/getAllUsers", getAllUsers);
+app.use("/dhruvbanking/get/getSpecificUser", getSpecificUser);
+app.use("/dhruvbanking/get/getAllUsers", getAllUsers);
+
+// Use Routes -- POST
+app.use("/dhruvbanking/post/verifyEmail", verifyEmail);
+
+// ------------------------------- //
 
 app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });
