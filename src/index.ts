@@ -8,11 +8,13 @@ const port = 3000;
 
 // Routes -- GET
 const getSpecificUser = require("./routes/get/getSpecificUser");
+const getAllUsers = require("./routes/get/getAllUsers");
 
 // ------------------------------- //
 
 // Use Routes -- GET
 app.use("/dhruvbanking/api/get/getSpecificUser", getSpecificUser);
+app.use("/dhruvbanking/api/get/getAllUsers", getAllUsers);
 
 app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });

@@ -1,10 +1,11 @@
-import express, { Request, Response, Router } from "express";
+import express, { Request, Response } from "express";
 
 import { pool } from "../../core/database/pool";
 
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
+  let sqlRes;
   const username = req.query.username;
 
   if (username === undefined || username === "")
@@ -15,7 +16,11 @@ router.get("/", async (req: Request, res: Response) => {
     values: [username],
   };
 
-  let sqlRes = await pool.query(query);
+  try {
+    sqlRes = await pool.query(query);
+  } catch (err: any) {
+    return res.status(500).send({ detail: err.stack });
+  }
 
   return res.send(sqlRes.rows[0]);
 });
