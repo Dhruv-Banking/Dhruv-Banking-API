@@ -46,7 +46,7 @@ export async function createTables(): Promise<any> {
   let createUsersTableResult = await createUsersTable();
   let createFlagIpTableResult = await createFlagIpTable();
 
-  if (createUsersTableResult || createFlagIpTableResult) return true;
+  if (createUsersTableResult && createFlagIpTableResult) return true;
 
   return [createUsersTableResult, createFlagIpTableResult];
 }

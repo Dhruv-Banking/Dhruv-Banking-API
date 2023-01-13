@@ -3,7 +3,16 @@ import express, { Application, Request, Response } from "express";
 import { createTables } from "./core/database/tables";
 
 const app: Application = express();
+app.use(express.json());
 const port = 3000;
+
+// Routes -- GET
+const getSpecificUser = require("./routes/get/getSpecificUser");
+
+// ------------------------------- //
+
+// Use Routes -- GET
+app.use("/dhruvbanking/api/get/getSpecificUser", getSpecificUser);
 
 app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });
