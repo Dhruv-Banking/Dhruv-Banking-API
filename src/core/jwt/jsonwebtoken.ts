@@ -15,6 +15,6 @@ export function createToken(user: any): any {
  * @param token jwt token
  * @returns a dictionary of the values in the token
  */
-export function decryptToken(token: string): any {
+export function decryptToken(token: any): any {
   return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 }

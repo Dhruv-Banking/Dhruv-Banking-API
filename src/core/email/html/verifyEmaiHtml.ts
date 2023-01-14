@@ -1,4 +1,4 @@
-export const verifyEmailhtml = `<!DOCTYPE html>
+export const verifyEmailHtml = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />

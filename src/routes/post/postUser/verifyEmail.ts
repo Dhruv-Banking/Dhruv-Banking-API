@@ -7,10 +7,13 @@ import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { User } from "../../../core/data/types";
 import { hashPassword } from "../../../core/bcrypt/bcrypt";
 import { roles } from "../../../core/data/roles";
-import { verifyEmailhtml } from "../../../core/email/html/verifyEmaiHtml";
+import { verifyEmailHtml } from "../../../core/email/html/verifyEmaiHtml";
 import { createToken } from "../../../core/jwt/jsonwebtoken";
 
 const router = express.Router();
+
+// make a loop to check if the generated UUID already exists, if it does, generate a new one, if not, then break and continue with the program
+// also do the same for the username.
 
 router.post("/", async (req: Request, res: Response) => {
   const arrOfItems = [
@@ -35,6 +38,7 @@ router.post("/", async (req: Request, res: Response) => {
     checkings: 0,
     savings: 0,
     role: roles.verifyEmail,
+    transactions: {},
   };
 
   let transporter = nodemailer.createTransport({
@@ -49,11 +53,11 @@ router.post("/", async (req: Request, res: Response) => {
     from: process.env.EMAIL,
     to: user.email,
     subject: "Email Verification",
-    html: verifyEmailhtml.replace("user.token", createToken(user)),
+    html: verifyEmailHtml.replace("user.token", createToken(user)),
   };
 
   transporter.sendMail(details, (err: any) => {
-    if (err) return res.send({ details: err });
+    if (err) return res.status(500).send({ details: err });
     else return res.send({ detail: "Email sent" });
   });
 });

@@ -9,4 +9,5 @@ export type User = {
   checkings: number;
   savings: number;
   role: string;
+  transactions: {};
 };
