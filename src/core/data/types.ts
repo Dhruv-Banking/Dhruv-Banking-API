@@ -28,3 +28,10 @@ export type SendMoneyToMyself = {
   password: string;
   amount: number;
 };
+
+export type SendMoneyToAnotherUser = {
+  userFrom: string;
+  userTo: string;
+  amount: number;
+  password: string;
+};
