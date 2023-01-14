@@ -15,6 +15,10 @@ const verifyEmail = require("./routes/post/postUser/verifyEmail");
 const postUserFromToken = require("./routes/post/postUser/postUserFromToken");
 const authUserLogin = require("./routes/post/authUserLogin");
 
+// Routes -- PUT
+const forgotPasswordEmail = require("./routes/put/forgotPassword/forgotPasswordEmail");
+const forgotPasswordFromToken = require("./routes/put/forgotPassword/forgotPasswordFromToken");
+
 // ------------------------------- //
 
 // Use Routes -- GET
@@ -25,6 +29,10 @@ app.use("/dhruvbanking/get/getAllUsers", getAllUsers);
 app.use("/dhruvbanking/post/verifyEmail", verifyEmail);
 app.use("/dhruvbanking/post/postUserFromToken", postUserFromToken);
 app.use("/dhruvbanking/post/authUserLogin", authUserLogin);
+
+// Use Routes -- PUT
+app.use("/dhruvbanking/put/forgotPasswordEmail", forgotPasswordEmail);
+app.use("/dhruvbanking/put/forgotPasswordFromToken", forgotPasswordFromToken);
 
 // ------------------------------- //
 

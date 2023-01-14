@@ -4,6 +4,6 @@ export const roles = {
   admin: "ADMIN",
   basic: "BASIC",
   viewer: "VIEWER",
-  reset: "RESET",
+  resetPassword: "RESET",
   verifyEmail: "VERIFY",
 };

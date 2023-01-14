@@ -16,3 +16,9 @@ export type UserLogin = {
   username: string;
   password: string;
 };
+
+export type UserResetPassword = {
+  username: string;
+  newPassword: string;
+  role: string;
+};
