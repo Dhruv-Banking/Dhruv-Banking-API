@@ -11,3 +11,8 @@ export type User = {
   role: string;
   transactions: {};
 };
+
+export type UserLogin = {
+  username: string;
+  password: string;
+};

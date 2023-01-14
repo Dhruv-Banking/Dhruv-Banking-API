@@ -1,14 +1,16 @@
 import express, { Request, Response } from "express";
 
 import { pool } from "../../core/database/pool";
+import { verifyArray } from "../../core/verifyArray/verifyArray";
 
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   let sqlRes;
   const username = req.query.username;
+  const arrOfItems = [req.body.username];
 
-  if (username === undefined || username === "")
+  if (!verifyArray(arrOfItems))
     return res.status(400).send({ detail: "Please provide user." });
 
   const query = {

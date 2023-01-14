@@ -13,6 +13,7 @@ const getAllUsers = require("./routes/get/getAllUsers");
 // Routes -- POST
 const verifyEmail = require("./routes/post/postUser/verifyEmail");
 const postUserFromToken = require("./routes/post/postUser/postUserFromToken");
+const authUserLogin = require("./routes/post/authUserLogin");
 
 // ------------------------------- //
 
@@ -23,6 +24,7 @@ app.use("/dhruvbanking/get/getAllUsers", getAllUsers);
 // Use Routes -- POST
 app.use("/dhruvbanking/post/verifyEmail", verifyEmail);
 app.use("/dhruvbanking/post/postUserFromToken", postUserFromToken);
+app.use("/dhruvbanking/post/authUserLogin", authUserLogin);
 
 // ------------------------------- //
 
