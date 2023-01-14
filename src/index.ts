@@ -18,6 +18,8 @@ const authUserLogin = require("./routes/post/authUserLogin");
 // Routes -- PUT
 const forgotPasswordEmail = require("./routes/put/forgotPassword/forgotPasswordEmail");
 const forgotPasswordFromToken = require("./routes/put/forgotPassword/forgotPasswordFromToken");
+const savingsToCheckings = require("./routes/put/transferMoney/savingsToCheckings");
+const checkingsToSavings = require("./routes/put/transferMoney/checkingsToSavings");
 
 // ------------------------------- //
 
@@ -33,6 +35,8 @@ app.use("/dhruvbanking/post/authUserLogin", authUserLogin);
 // Use Routes -- PUT
 app.use("/dhruvbanking/put/forgotPasswordEmail", forgotPasswordEmail);
 app.use("/dhruvbanking/put/forgotPasswordFromToken", forgotPasswordFromToken);
+app.use("/dhruvbanking/put/savingsToCheckings", savingsToCheckings);
+app.use("/dhruvbanking/put/checkingsToSavings", checkingsToSavings);
 
 // ------------------------------- //
 

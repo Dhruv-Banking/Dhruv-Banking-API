@@ -22,3 +22,9 @@ export type UserResetPassword = {
   newPassword: string;
   role: string;
 };
+
+export type SendMoneyToMyself = {
+  username: string;
+  password: string;
+  amount: number;
+};
