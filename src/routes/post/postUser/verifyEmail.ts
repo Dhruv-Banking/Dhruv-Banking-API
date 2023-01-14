@@ -34,7 +34,7 @@ router.post("/", async (req: Request, res: Response) => {
     phonenumber: req.body.phonenumber,
     checkings: 0,
     savings: 0,
-    role: roles.basic,
+    role: roles.verifyEmail,
   };
 
   let transporter = nodemailer.createTransport({
