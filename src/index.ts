@@ -1,10 +1,12 @@
 import express, { Application, Request, Response } from "express";
+const fs = require("fs");
+const https = require("https");
 
 import { createTables } from "./core/database/tables";
 
 const app: Application = express();
 app.use(express.json());
-const port = 3000;
+const port = 443;
 
 // Routes -- GET
 const getSpecificUser = require("./routes/get/getSpecificUser");
@@ -62,6 +64,14 @@ app.all("*", async (req: Request, res: Response) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`API listening on port ${port}`);
-});
+https
+  .createServer(
+    {
+      key: fs.readFileSync(`${__dirname}\\private.key`),
+      cert: fs.readFileSync(`${__dirname}\\certificate.csr`),
+    },
+    app
+  )
+  .listen(port, () => {
+    console.log(`API listening on port ${port}`);
+  });
