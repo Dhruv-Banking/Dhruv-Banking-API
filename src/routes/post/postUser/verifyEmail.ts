@@ -20,6 +20,7 @@ router.post("/", async (req: Request, res: Response) => {
     req.body.username,
     req.body.firstname,
     req.body.lastname,
+    req.body.password,
     req.body.email,
     req.body.phonenumber,
   ];

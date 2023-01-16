@@ -35,3 +35,8 @@ export type SendMoneyToAnotherUser = {
   amount: number;
   password: string;
 };
+
+export type DeleteUser = {
+  username: string;
+  password: string;
+};

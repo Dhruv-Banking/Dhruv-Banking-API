@@ -1,18 +1,17 @@
 import express, { Application, Request, Response } from "express";
-const fs = require("fs");
-const https = require("https");
 
 import { createTables } from "./core/database/tables";
 
 const app: Application = express();
 app.use(express.json());
-const port = 443;
+const port = 3000;
 
 // Routes -- GET
 const getSpecificUser = require("./routes/get/getSpecificUser");
 const getAllUsers = require("./routes/get/getAllUsers");
 
 // Routes -- POST
+const postUserNoVerification = require("./routes/post/postUserNoVerification");
 const verifyEmail = require("./routes/post/postUser/verifyEmail");
 const postUserFromToken = require("./routes/post/postUser/postUserFromToken");
 const authUserLogin = require("./routes/post/authUserLogin");
@@ -24,6 +23,9 @@ const savingsToCheckings = require("./routes/put/transferMoney/savingsToChecking
 const checkingsToSavings = require("./routes/put/transferMoney/checkingsToSavings");
 const toAnotherUser = require("./routes/put/transferMoney/toAnotherUser");
 
+// Routes -- Delete
+const deleteUser = require("./routes/delete/deleteUser");
+
 // ------------------------------- //
 
 // Use Routes -- GET
@@ -31,6 +33,7 @@ app.use("/dhruvbanking/get/getSpecificUser", getSpecificUser);
 app.use("/dhruvbanking/get/getAllUsers", getAllUsers);
 
 // Use Routes -- POST
+app.use("/dhruvbanking/post/postUserNoVerification", postUserNoVerification);
 app.use("/dhruvbanking/post/verifyEmail", verifyEmail);
 app.use("/dhruvbanking/post/postUserFromToken", postUserFromToken);
 app.use("/dhruvbanking/post/authUserLogin", authUserLogin);
@@ -41,6 +44,9 @@ app.use("/dhruvbanking/put/forgotPasswordFromToken", forgotPasswordFromToken);
 app.use("/dhruvbanking/put/savingsToCheckings", savingsToCheckings);
 app.use("/dhruvbanking/put/checkingsToSavings", checkingsToSavings);
 app.use("/dhruvbanking/put/toAnotherUser", toAnotherUser);
+
+// Use Routes -- Delete
+app.use("/dhruvbanking/delete/deleteUser", deleteUser);
 
 // ------------------------------- //
 
@@ -64,14 +70,6 @@ app.all("*", async (req: Request, res: Response) => {
   });
 });
 
-https
-  .createServer(
-    {
-      key: fs.readFileSync(`${__dirname}\\private.key`),
-      cert: fs.readFileSync(`${__dirname}\\certificate.csr`),
-    },
-    app
-  )
-  .listen(port, () => {
-    console.log(`API listening on port ${port}`);
-  });
+app.listen(port, () => {
+  console.log(`API listening on port ${port}`);
+});

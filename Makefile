@@ -1,2 +1,1 @@
-dev:
-	@npm run dev
+dev: ; @npm run dev
