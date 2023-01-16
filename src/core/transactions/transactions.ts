@@ -18,19 +18,23 @@ jsonToAppend = {
 }
 */
 
-async function updateCheckingsToSavings(
+export async function updateCheckingsToSavings(
+  username: string,
+  amount: number,
+  time: object
+): Promise<void> {
+  console.log(username);
+  console.log(amount);
+  console.log(time);
+}
+
+export async function updateSavingsToCheckings(
   username: string,
   amount: number,
   time: object
 ): Promise<void> {}
 
-async function updateSavingsToCheckings(
-  username: string,
-  amount: number,
-  time: object
-): Promise<void> {}
-
-async function updateToAnotherUser(
+export async function updateToAnotherUser(
   username: string,
   amount: number,
   userTo: string,

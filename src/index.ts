@@ -54,6 +54,12 @@ app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });
 });
 
+import { updateCheckingsToSavings } from "./core/transactions/transactions";
+
+app.get("/test", async (req: Request, res: Response) => {
+  await updateCheckingsToSavings("dRayat", 100, new Date());
+});
+
 app.get("/createTables", async (req: Request, res: Response) => {
   let result = await createTables();
 
