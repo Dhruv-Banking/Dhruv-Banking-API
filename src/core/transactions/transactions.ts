@@ -1,4 +1,3 @@
-import internal from "stream";
 import { pool } from "../database/pool";
 
 /*
