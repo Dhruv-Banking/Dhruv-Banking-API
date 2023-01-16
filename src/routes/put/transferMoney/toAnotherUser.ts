@@ -5,6 +5,7 @@ import { SendMoneyToAnotherUser } from "../../../core/data/types";
 import { pool } from "../../../core/database/pool";
 import { comparePassword } from "../../../core/bcrypt/bcrypt";
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
+import { updateToAnotherUser } from "../../../core/transactions/transactions";
 
 const router = express.Router();
 
@@ -91,6 +92,13 @@ router.put("/", async (req: Request, res: Response) => {
   } catch (err: any) {
     return res.status(500).send({ detail: "Unknown Server Error" });
   }
+
+  await updateToAnotherUser(
+    user.userFrom,
+    user.amount,
+    user.userTo,
+    new Date()
+  );
 
   return res.status(201).send({
     detail: `Successfully transferred ${user.amount} from '${user.userFrom}' to '${user.userTo}'`,

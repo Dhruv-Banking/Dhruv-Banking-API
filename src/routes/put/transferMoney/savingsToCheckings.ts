@@ -5,6 +5,7 @@ import { SendMoneyToMyself } from "../../../core/data/types";
 import { pool } from "../../../core/database/pool";
 import { comparePassword } from "../../../core/bcrypt/bcrypt";
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
+import { updateSavingsToCheckings } from "../../../core/transactions/transactions";
 
 const router = express.Router();
 
@@ -71,6 +72,8 @@ router.put("/", async (req: Request, res: Response) => {
   } catch (err: any) {
     return res.status(500).send({ detail: err.stack });
   }
+
+  await updateSavingsToCheckings(user.username, user.amount, new Date());
 
   return res.status(201).send({
     detail: `Successfully transered ${user.amount} from savings to checkings`,

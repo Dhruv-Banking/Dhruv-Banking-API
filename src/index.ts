@@ -55,9 +55,9 @@ app.get("/", async (req: Request, res: Response) => {
 });
 
 import { updateCheckingsToSavings } from "./core/transactions/transactions";
-
 app.get("/test", async (req: Request, res: Response) => {
-  await updateCheckingsToSavings("dRayat", 100, new Date());
+  // Testing endpoint
+  await updateCheckingsToSavings("dRayat", 10, new Date());
 });
 
 app.get("/createTables", async (req: Request, res: Response) => {
