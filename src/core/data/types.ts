@@ -40,3 +40,14 @@ export type DeleteUser = {
   username: string;
   password: string;
 };
+
+export type PostUserToken = {
+  username: string;
+  role: string;
+};
+
+export type NormalUserToken = {
+  username: string;
+  password: string;
+  role: string;
+};
