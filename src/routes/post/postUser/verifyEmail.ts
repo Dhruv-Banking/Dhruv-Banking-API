@@ -9,11 +9,9 @@ import { hashPassword } from "../../../core/bcrypt/bcrypt";
 import { roles } from "../../../core/data/roles";
 import { verifyEmailHtml } from "../../../core/email/html/verifyEmaiHtml";
 import { createToken } from "../../../core/jwt/jsonwebtoken";
+import { pool } from "../../../core/database/pool";
 
 const router = express.Router();
-
-// make a loop to check if the generated UUID already exists, if it does, generate a new one, if not, then break and continue with the program
-// also do the same for the username.
 
 router.post("/", async (req: Request, res: Response) => {
   const arrOfItems = [
@@ -41,6 +39,24 @@ router.post("/", async (req: Request, res: Response) => {
     role: roles.verifyEmail,
     transactions: {},
   };
+
+  const query = {
+    text: "SELECT * FROM public.users WHERE username=$1",
+    values: [user.username],
+  };
+
+  let sqlRes;
+
+  try {
+    sqlRes = await pool.query(query);
+  } catch (err: any) {
+    return res.status(500).send({ detail: err.stack });
+  }
+
+  if (sqlRes.rowCount !== 0)
+    return res
+      .status(400)
+      .send({ detail: "Someone with that username already exists" });
 
   let transporter = nodemailer.createTransport({
     service: "gmail",
