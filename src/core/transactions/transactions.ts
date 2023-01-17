@@ -32,6 +32,7 @@ export async function updateCheckingsToSavings(
       amount: amount,
       time: time,
       toAnotherUser: false,
+      fromAnotherUser: false,
     },
   ];
 
@@ -97,6 +98,7 @@ export async function updateSavingsToCheckings(
       amount: amount,
       time: time,
       toAnotherUser: false,
+      fromAnotherUser: false,
     },
   ];
 
@@ -158,14 +160,16 @@ export async function updateToAnotherUser(
     return false;
   }
 
-  const jsonToAppend = [
+  let jsonToAppend = [
     {
       fromAccount: "Checking",
       toAccount: "Checkings",
       userTo: userTo,
+      userFrom: username,
       amount: amount,
       time: time,
       toAnotherUser: true,
+      fromAnotherUser: false,
     },
   ];
 
@@ -180,6 +184,27 @@ export async function updateToAnotherUser(
       return false;
     }
 
+    jsonToAppend = [
+      {
+        fromAccount: "Checking",
+        toAccount: "Checkings",
+        userTo: userTo,
+        userFrom: username,
+        amount: amount,
+        time: time,
+        toAnotherUser: true,
+        fromAnotherUser: true,
+      },
+    ];
+
+    values = [JSON.stringify(jsonToAppend), userTo];
+
+    try {
+      await pool.query(query, values);
+    } catch (err: any) {
+      return false;
+    }
+
     return true;
   } else {
     let newJsonToAppend = JSON.stringify(
@@ -190,6 +215,33 @@ export async function updateToAnotherUser(
 
     query = "UPDATE public.users SET transactions=$1 WHERE username=$2;";
     values = [newJsonToAppend, username];
+
+    try {
+      await pool.query(query, values);
+    } catch (err: any) {
+      return false;
+    }
+
+    jsonToAppend = [
+      {
+        fromAccount: "Checking",
+        toAccount: "Checkings",
+        userTo: userTo,
+        userFrom: username,
+        amount: amount,
+        time: time,
+        toAnotherUser: true,
+        fromAnotherUser: true,
+      },
+    ];
+
+    newJsonToAppend = JSON.stringify(
+      JSON.parse(
+        JSON.stringify(sqlRes.rows[0].transactions.concat(jsonToAppend))
+      )
+    );
+
+    values = [newJsonToAppend, userTo];
 
     try {
       await pool.query(query, values);
