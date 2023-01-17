@@ -6,4 +6,5 @@ export const roles = {
   viewer: "VIEWER",
   resetPassword: "RESET",
   verifyEmail: "VERIFY",
+  postUser: "POSTUSER",
 };
