@@ -6,6 +6,9 @@ const app: Application = express();
 app.use(express.json());
 const port = 3000;
 
+// Routes -- Auth
+const login = require("./core/auth/login");
+
 // Routes -- GET
 const getSpecificUser = require("./routes/get/getSpecificUser");
 const getAllUsers = require("./routes/get/getAllUsers");
@@ -27,6 +30,9 @@ const toAnotherUser = require("./routes/put/transferMoney/toAnotherUser");
 const deleteUser = require("./routes/delete/deleteUser");
 
 // ------------------------------- //
+
+// Use Routes -- Auth
+app.use("/dhruvbanking/login", login);
 
 // Use Routes -- GET
 app.use("/dhruvbanking/get/getSpecificUser", getSpecificUser);
@@ -54,10 +60,8 @@ app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });
 });
 
-import { updateCheckingsToSavings } from "./core/transactions/transactions";
 app.get("/test", async (req: Request, res: Response) => {
   // Testing endpoint
-  await updateCheckingsToSavings("dRayat", 10, new Date());
 });
 
 app.get("/createTables", async (req: Request, res: Response) => {
