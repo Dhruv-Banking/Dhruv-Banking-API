@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
+require("dotenv").config({ path: "../../.env" });
 
 import { comparePassword } from "../bcrypt/bcrypt";
 import { roles } from "../data/roles";
@@ -9,7 +11,32 @@ import { PostUserToken, NormalUserToken } from "../data/types";
 
 let router = express.Router();
 
-router.post("/user", async (req: Request, res: Response) => {
+let tokens: any[] = [];
+
+router.post("/refreshToken", async (req: Request, res: Response) => {
+  const token = req.body.token;
+
+  if (token == null) return res.sendStatus(401);
+  if (!tokens.includes(token)) return res.sendStatus(401);
+
+  jwt.verify(
+    token,
+    process.env.REFRESH_TOKEN_SECRET!,
+    (err: any, user: any) => {
+      if (err) return res.status(403).json({ result: "Forbidden" });
+
+      const accessToken = createToken({
+        username: user.username,
+        password: user.password,
+        role: user.role,
+      });
+
+      return res.send({ accessToken: accessToken });
+    }
+  );
+});
+
+router.post("/", async (req: Request, res: Response) => {
   let arrOfItems = [req.body.username, req.body.password];
 
   if (!verifyArray(arrOfItems))
@@ -52,9 +79,11 @@ router.post("/user", async (req: Request, res: Response) => {
 
   console.log("created user with token: " + user.role);
 
-  let token = createToken(user);
+  const token = createToken(user);
+  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET!);
+  tokens.push(refreshToken);
 
-  return res.send({ accessToken: token });
+  return res.send({ accessToken: token, refreshToken: refreshToken });
 });
 
 module.exports = router;
