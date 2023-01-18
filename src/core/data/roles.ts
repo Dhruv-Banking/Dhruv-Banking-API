@@ -7,4 +7,5 @@ export const roles = {
   resetPassword: "RESET",
   verifyEmail: "VERIFY",
   postUser: "POSTUSER",
+  refreshToken: "REFRESH",
 };

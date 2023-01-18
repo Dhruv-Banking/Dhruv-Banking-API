@@ -95,6 +95,7 @@ router.post("/", async (req: Request, res: Response) => {
   console.log("created user with token: " + user.role);
 
   const token = createToken(user);
+  user.role = roles.refreshToken;
   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET!);
   client.set(user.username, refreshToken);
 

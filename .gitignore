@@ -3,3 +3,4 @@ build/
 .env
 *.csr
 *.key
+dump.rdb
