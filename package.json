@@ -29,6 +29,7 @@
     "@types/node": "^18.11.18",
     "@types/nodemailer": "^6.4.7",
     "@types/pg": "^8.6.6",
+    "@types/redis": "^4.0.11",
     "@types/underscore": "^1.11.4",
     "nodemon": "^2.0.20",
     "rimraf": "^4.0.0",
@@ -44,6 +45,7 @@
     "jsonwebtoken": "^9.0.0",
     "nodemailer": "^6.9.0",
     "pg": "^8.8.0",
+    "redis": "^4.5.1",
     "underscore": "^1.13.6"
   }
 }

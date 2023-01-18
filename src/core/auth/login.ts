@@ -1,23 +1,36 @@
 import express, { Request, Response } from "express";
-import jwt, { TokenExpiredError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { createClient } from "redis";
 require("dotenv").config({ path: "../../.env" });
 
 import { comparePassword } from "../bcrypt/bcrypt";
 import { roles } from "../data/roles";
 import { pool } from "../database/pool";
-import { createToken } from "../jwt/jsonwebtoken";
+import { createToken, decryptTokenRefresh } from "../jwt/jsonwebtoken";
 import { verifyArray } from "../verifyArray/verifyArray";
 import { PostUserToken, NormalUserToken } from "../data/types";
 
 let router = express.Router();
 
-let tokens: any[] = [];
+const client = createClient();
+client.on("error", (err: any) => console.log("Redis Client Error", err));
+
+client.connect();
 
 router.post("/refreshToken", async (req: Request, res: Response) => {
   const token = req.body.token;
+  let tokenData;
+
+  try {
+    tokenData = decryptTokenRefresh(token);
+  } catch (err: any) {
+    return res.status(400).send({ detail: "How dare you give me a bad token" });
+  }
+
+  let redisRes = await client.get(`${tokenData.username}`);
 
   if (token == null) return res.sendStatus(401);
-  if (!tokens.includes(token)) return res.sendStatus(401);
+  if (redisRes == null) return res.sendStatus(401);
 
   jwt.verify(
     token,
@@ -81,7 +94,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   const token = createToken(user);
   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET!);
-  tokens.push(refreshToken);
+  client.set(user.username, refreshToken);
 
   return res.send({ accessToken: token, refreshToken: refreshToken });
 });
