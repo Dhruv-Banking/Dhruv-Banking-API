@@ -29,8 +29,10 @@ router.post("/refreshToken", async (req: Request, res: Response) => {
 
   let redisRes = await client.get(`${tokenData.username}`);
 
-  if (token == null) return res.sendStatus(401);
-  if (redisRes == null) return res.sendStatus(401);
+  if (token === null)
+    return res.status(400).send({ detail: "Provide a token" });
+  if (redisRes === null)
+    return res.status(400).send({ detail: "You do not exist in the database" });
 
   jwt.verify(
     token,
