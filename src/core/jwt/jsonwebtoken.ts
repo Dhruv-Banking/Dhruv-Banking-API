@@ -7,7 +7,9 @@ require("dotenv").config({ path: "../../.env" });
  * @return Returns a token
  */
 export function createToken(user: any): any {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "15s",
+  });
 }
 
 /**
