@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
 
 import { pool } from "../../core/database/pool";
+import { authToken } from "../../core/auth/auth";
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", authToken, async (req: Request, res: Response) => {
   let sqlRes;
 
   try {
