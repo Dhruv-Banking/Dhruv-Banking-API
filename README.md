@@ -2,7 +2,7 @@
 
 # Tech stack
 
-## Front End:
+## Front End
 
 <a margin="40px" href=https://svelte.dev/ > <img width ='32px' src ='https://raw.githubusercontent.com/rahulbanerjee26/githubProfileReadmeGenerator/51f83dfc2091cdec25b7b33bd2d3da0996ec3efd/icons/svelte.svg'>
 
