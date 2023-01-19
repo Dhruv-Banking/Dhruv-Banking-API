@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 require("dotenv").config({ path: "../../.env" });
 
 export function authToken(
@@ -12,7 +12,7 @@ export function authToken(
   if (token === null) return res.sendStatus(401);
 
   // Verify the token
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err: any, user: any) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, (err: any, user: any) => {
     if (err) return res.status(403).json({ result: "Forbidden" });
 
     req.user = user;

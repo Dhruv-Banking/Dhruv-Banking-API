@@ -1,28 +1,35 @@
 import express, { Request, Response } from "express";
 
 import { pool } from "../../core/database/pool";
+import { authToken } from "../../core/auth/auth";
+import { getSpecificUserMiddleware } from "../../core/middleware/getMiddleware";
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
-  let sqlRes;
-  const username = req.query.username;
+router.get(
+  "/",
+  authToken,
+  getSpecificUserMiddleware,
+  async (req: Request, res: Response) => {
+    let sqlRes;
+    const username = req.query.username;
 
-  if (username === undefined || username === "")
-    return res.status(400).send({ detail: "Please provide user." });
+    if (username === undefined || username === "")
+      return res.status(400).send({ detail: "Please provide user." });
 
-  const query = {
-    text: "SELECT uuid, username, firstname, lastname, email, phonenumber, checkings, savings, role, transactions from public.users WHERE username=$1",
-    values: [username],
-  };
+    const query = {
+      text: "SELECT uuid, username, firstname, lastname, email, phonenumber, checkings, savings, role, transactions from public.users WHERE username=$1",
+      values: [username],
+    };
 
-  try {
-    sqlRes = await pool.query(query);
-  } catch (err: any) {
-    return res.status(500).send({ detail: err.stack });
+    try {
+      sqlRes = await pool.query(query);
+    } catch (err: any) {
+      return res.status(500).send({ detail: err.stack });
+    }
+
+    return res.send(sqlRes.rows[0]);
   }
-
-  return res.send(sqlRes.rows[0]);
-});
+);
 
 module.exports = router;
