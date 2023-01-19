@@ -4,3 +4,4 @@ build/
 *.csr
 *.key
 dump.rdb
+certificate
