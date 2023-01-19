@@ -9,7 +9,7 @@ export const roles = {
   refreshToken: "REFRESH",
 };
 
-export const roleValues: { [key: string]: number | any } = {
+export const roleValues: { [key: string]: number } = {
   DHRUV: 10,
   GOD: 9,
   ADMIN: 8,

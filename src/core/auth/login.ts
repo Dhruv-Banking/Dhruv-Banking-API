@@ -17,6 +17,7 @@ client.on("error", (err: any) => console.log("Redis Client Error", err));
 
 client.connect();
 
+// only a refresh token can call this
 router.post("/refreshToken", async (req: Request, res: Response) => {
   const token = req.body.token;
   let tokenData;
