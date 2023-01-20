@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { createClient } from "redis";
 require("dotenv").config({ path: "../../.env" });
 
 import { comparePassword } from "../bcrypt/bcrypt";
@@ -9,13 +8,9 @@ import { pool } from "../database/pool";
 import { createToken, decryptTokenRefresh } from "../jwt/jsonwebtoken";
 import { verifyArray } from "../verifyArray/verifyArray";
 import { PostUserToken, NormalUserToken } from "../data/types";
+import { client } from "../database/redis";
 
 let router = express.Router();
-
-const client = createClient();
-client.on("error", (err: any) => console.log("Redis Client Error", err));
-
-client.connect();
 
 // only a refresh token can call this
 router.post("/refreshToken", async (req: Request, res: Response) => {
@@ -32,8 +27,14 @@ router.post("/refreshToken", async (req: Request, res: Response) => {
 
   if (token === null)
     return res.status(400).send({ detail: "Provide a token" });
+
   if (redisRes === null)
     return res.status(400).send({ detail: "You do not exist in the database" });
+
+  if (redisRes !== token)
+    return res
+      .status(400)
+      .send({ detail: "You must only use a new your latest refresh token" });
 
   jwt.verify(
     token,
