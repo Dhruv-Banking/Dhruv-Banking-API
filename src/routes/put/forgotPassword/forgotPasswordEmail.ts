@@ -12,9 +12,6 @@ import { pool } from "../../../core/database/pool";
 
 const router = express.Router();
 
-// make a loop to check if the generated UUID already exists, if it does, generate a new one, if not, then break and continue with the program
-// also do the same for the username.
-
 router.put("/", async (req: Request, res: Response) => {
   let arrOfItems = [req.body.username, req.body.newPassword];
 

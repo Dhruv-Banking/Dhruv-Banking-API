@@ -6,6 +6,8 @@ import { pool } from "../../../core/database/pool";
 import { comparePassword } from "../../../core/bcrypt/bcrypt";
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { updateSavingsToCheckings } from "../../../core/transactions/transactions";
+import { transferMoneyMiddleware } from "../../../core/middleware/putMiddleware";
+import { authToken } from "../../../core/auth/auth";
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 
-import { roleValues } from "../data/roles";
+import { roles, roleValues } from "../data/roles";
 import { decryptToken } from "../jwt/jsonwebtoken";
 
-export function getAllUsersMiddleware(
+export function forgotPasswordFromTokenMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
@@ -14,15 +14,15 @@ export function getAllUsersMiddleware(
 
   let payload = decryptToken(token);
 
-  if (!(roleValues[payload.role] >= 8))
-    return res.send({
-      detail: "You are not authorized to perform this action",
-    });
+  if (!(roleValues[payload.role] === 5))
+    return res
+      .status(400)
+      .send({ detail: "You are not authorized to perform this action" });
 
   next();
 }
 
-export function getSpecificUserMiddleware(
+export function transferMoneyMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
@@ -32,16 +32,18 @@ export function getSpecificUserMiddleware(
   if (token === null) return res.sendStatus(401);
 
   let payload = decryptToken(token);
+  let username = req.query.username;
+  let tokenName = payload.username;
 
-  if (payload.username !== req.query.username && roleValues[payload.role] <= 7)
-    return res.send({
-      detail: "You are not authorized to perform this action",
-    });
+  if (!(roleValues[payload.role] >= 7))
+    return res
+      .status(400)
+      .send({ detail: "You are not authorized to perform this action" });
 
-  if (payload.role <= 8)
-    return res.send({
-      detail: "You are not authorized to perform this action",
-    });
+  if (username !== tokenName) {
+    res.status(400);
+    return res.send({ detail: "Please use the same token as the user" });
+  }
 
   next();
 }
