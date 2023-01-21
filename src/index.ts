@@ -1,9 +1,17 @@
 import express, { Application, Request, Response } from "express";
+import cors from "cors";
+import rateLimiter from "express-rate-limit";
 
-import { createTables } from "./core/database/tables";
+const limiter = rateLimiter({
+  windowMs: 60 * 1000, // 1 Minutes
+  max: 300, // Max of 300 every 1 minutes
+  message: { detail: "You are being rate limited." },
+});
 
 const app: Application = express();
 app.use(express.json());
+app.use(cors());
+app.use(limiter);
 const port = 3000;
 
 // Routes -- Auth
@@ -27,6 +35,9 @@ const toAnotherUser = require("./routes/put/transferMoney/toAnotherUser");
 
 // Routes -- Delete
 const deleteUser = require("./routes/delete/deleteUser");
+
+// Routes -- DHRUV
+const createTables = require("./routes/dhruv/createTables");
 
 // ------------------------------- //
 
@@ -52,22 +63,13 @@ app.use("/dhruvbanking/put/toAnotherUser", toAnotherUser);
 // Use Routes -- Delete
 app.use("/dhruvbanking/delete/deleteUser", deleteUser);
 
+// Use Routes -- DHRUV
+app.use("/dhruvbanking/dhruv/createTables", createTables);
+
 // ------------------------------- //
 
 app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });
-});
-
-app.get("/test", async (req: Request, res: Response) => {
-  // Testing endpoint
-});
-
-app.get("/createTables", async (req: Request, res: Response) => {
-  let result = await createTables();
-
-  if (result) return res.send({ detail: "Success making tables" });
-
-  return res.send({ detail: result });
 });
 
 // Fallback
