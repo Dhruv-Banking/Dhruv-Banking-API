@@ -7,7 +7,7 @@ const user = process.env.USER;
 const host = process.env.HOST;
 const database = process.env.DATABASE;
 const password = process.env.PASSWORD;
-const port = process.env.PORT;
+const port = process.env.POSTGRES_PORT;
 
 // Creating the pool:
 export const pool: PoolClient = new Pool({
