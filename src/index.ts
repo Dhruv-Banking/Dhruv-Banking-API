@@ -1,8 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import rateLimiter from "express-rate-limit";
-var fs = require("fs");
-var https = require("https");
+import fs from "fs";
+import https from "https";
+import path from "path";
 
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 Minutes
@@ -12,6 +13,7 @@ const limiter = rateLimiter({
 
 const app: Application = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname + "/public")));
 app.use(cors());
 app.use(limiter);
 const port = 3000;
@@ -41,6 +43,9 @@ const deleteUser = require("./routes/delete/deleteUser");
 // Routes -- DHRUV
 const createTables = require("./routes/dhruv/createTables");
 
+// Routes -- GET HTML
+const verifyEmailHtml = require("./routes/post/postUser/veriftEmailHtmlPage");
+
 // ------------------------------- //
 
 // Use Routes -- Auth
@@ -68,6 +73,9 @@ app.use("/dhruvbanking/delete/deleteUser", deleteUser);
 // Use Routes -- DHRUV
 app.use("/dhruvbanking/dhruv/createTables", createTables);
 
+// Use Routes -- GET HTML
+app.use("/dhruvbanking/secure/verifyEmailHtml", verifyEmailHtml);
+
 // ------------------------------- //
 
 app.get("/", async (req: Request, res: Response) => {
@@ -75,12 +83,12 @@ app.get("/", async (req: Request, res: Response) => {
 });
 
 // Fallback
-app.all("*", async (req: Request, res: Response) => {
-  return res.send({
-    detail: "This endpoint does not exist.",
-    endpoint: { detail: `'${req.url}' does not exist.` },
-  });
-});
+// app.all("*", async (req: Request, res: Response) => {
+//   return res.send({
+//     detail: "This endpoint does not exist.",
+//     endpoint: { detail: `'${req.url}' does not exist.` },
+//   });
+// });
 
 var certificate = fs.readFileSync(`${__dirname}/cert.pem`, "utf8");
 var privateKey = fs.readFileSync(`${__dirname}/key.pem`, "utf8");
@@ -89,4 +97,6 @@ var credentials = { key: privateKey, cert: certificate };
 
 var httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(3000);
+httpsServer.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});

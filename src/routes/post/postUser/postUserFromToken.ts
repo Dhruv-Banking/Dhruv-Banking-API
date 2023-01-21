@@ -87,7 +87,7 @@ router.post(
       if (err) return res.status(500).send({ details: err });
       else
         return res.status(201).send({
-          detail: `Successfully sent email, and created user: ${user.username}`,
+          detail: `Successfully sent email, and created user`,
         });
     });
   }
