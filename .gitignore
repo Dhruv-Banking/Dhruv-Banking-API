@@ -1,6 +1,5 @@
 node_modules/
 build/
 .env
-*.crt
-*.key
+*.pem
 dump.rdb

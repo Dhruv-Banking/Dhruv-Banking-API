@@ -1,6 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import rateLimiter from "express-rate-limit";
+var fs = require("fs");
+var https = require("https");
 
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 Minutes
@@ -80,6 +82,11 @@ app.all("*", async (req: Request, res: Response) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`API listening on port ${port}`);
-});
+var certificate = fs.readFileSync(`${__dirname}/cert.pem`, "utf8");
+var privateKey = fs.readFileSync(`${__dirname}/key.pem`, "utf8");
+
+var credentials = { key: privateKey, cert: certificate };
+
+var httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(3000);
