@@ -149,7 +149,7 @@ export const deleteUserEmail = `<!DOCTYPE html>
                   style="display: inline-block"
                 >
                   <img
-                    src="https://raw.githubusercontent.com/Dhruv-Banking/Dhruv-Banking-API/main/src/core/images/Dhruv%20BankingLongggggggggg.png"
+                    src="https://raw.githubusercontent.com/Dhruv-Banking/Dhruv-Banking-API/rewrite/src/core/email/images/Dhruv%20BankingLongggggggggg.png"
                     alt="Logo"
                     border="0"
                     width="600px"
