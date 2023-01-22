@@ -44,7 +44,7 @@ const deleteUser = require("./routes/delete/deleteUser");
 const createTables = require("./routes/dhruv/createTables");
 
 // Routes -- GET HTML
-const verifyEmailHtml = require("./routes/post/postUser/veriftEmailHtmlPage");
+const verifyEmailHtml = require("./routes/post/postUser/verifyEmailHtmlPage");
 
 // ------------------------------- //
 
@@ -83,12 +83,12 @@ app.get("/", async (req: Request, res: Response) => {
 });
 
 // Fallback
-// app.all("*", async (req: Request, res: Response) => {
-//   return res.send({
-//     detail: "This endpoint does not exist.",
-//     endpoint: { detail: `'${req.url}' does not exist.` },
-//   });
-// });
+app.all("*", async (req: Request, res: Response) => {
+  return res.send({
+    detail: "This endpoint does not exist.",
+    endpoint: { detail: `'${req.url}' does not exist.` },
+  });
+});
 
 var certificate = fs.readFileSync(`${__dirname}/cert.pem`, "utf8");
 var privateKey = fs.readFileSync(`${__dirname}/key.pem`, "utf8");
