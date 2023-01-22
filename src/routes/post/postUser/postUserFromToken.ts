@@ -9,6 +9,7 @@ import { decryptToken } from "../../../core/jwt/jsonwebtoken";
 import { pool } from "../../../core/database/pool";
 import { authToken } from "../../../core/auth/auth";
 import { postUserFromTokenMiddleware } from "../../../core/middleware/postMiddleware";
+import { loggingMiddleware } from "../../../core/ipLogging/logging";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.post(
   "/",
   authToken,
   postUserFromTokenMiddleware,
+  loggingMiddleware,
   async (req: Request, res: Response) => {
     let authHeader = req.headers["authorization"];
     let token = authHeader && authHeader.split(" ")[1]; // Splitting because it goes: "Bearer [space] TOKEN"
