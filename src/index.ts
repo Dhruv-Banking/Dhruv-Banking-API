@@ -42,6 +42,8 @@ const deleteUser = require("./routes/delete/deleteUser");
 
 // Routes -- DHRUV
 const createTables = require("./routes/dhruv/createTables");
+const clearIps = require("./routes/dhruv/clearIps");
+const drop = require("./routes/dhruv/drop");
 
 // Routes -- GET HTML
 const verifyEmailHtml = require("./routes/post/postUser/verifyEmailHtmlPage");
@@ -73,6 +75,8 @@ app.use("/dhruvbanking/delete/deleteUser", deleteUser);
 
 // Use Routes -- DHRUV
 app.use("/dhruvbanking/dhruv/createTables", createTables);
+app.use("/dhruvbanking/dhruv/clearIps", clearIps);
+app.use("/dhruvbanking/dhruv/drop", drop);
 
 // Use Routes -- GET HTML
 app.use("/dhruvbanking/secure/verifyEmailHtml", verifyEmailHtml);
@@ -82,11 +86,6 @@ app.use("/dhruvbanking/secure/forgotPasswordHtml", forgotPasswordHtml);
 
 app.get("/", async (req: Request, res: Response) => {
   return res.send({ detail: "Welcome to the Dhruv Banking API 2.0" });
-});
-
-app.get("/test", async (req: Request, res: Response) => {
-  let domain = `${req.protocol}://${req.headers.host}`;
-  return res.send(domain);
 });
 
 // Fallback
