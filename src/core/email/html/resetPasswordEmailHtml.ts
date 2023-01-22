@@ -235,7 +235,7 @@ export const resetPasswordEmailHtml = `<!DOCTYPE html>
                     Reset Password:
                   </h1>
                   <p style="margin: 0">
-                    Imagine needing to reset your password. Either use the button below, or use the rest token (Reset token lasts 15 minutes, be fast or else.). Your token:   user.token
+                    Imagine needing to reset your password. Either use the button below, or use the rest token (Reset token lasts 15 minutes, be fast or else).
                   </p>
                 </td>
               </tr>
@@ -251,7 +251,7 @@ export const resetPasswordEmailHtml = `<!DOCTYPE html>
                           <tr>
                             <td align="center" style="border-radius: 6px">
                               <a
-                                href="https://banking.dhruvrayat.com/resetPassword?token=user.token"
+                                href="host.name/dhruvbanking/secure/forgotPasswordHtml?token=user.token"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style="

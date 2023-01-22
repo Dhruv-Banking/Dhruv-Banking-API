@@ -76,7 +76,9 @@ router.post(
       from: process.env.EMAIL,
       to: user.email,
       subject: "Email Verification",
-      html: verifyEmailHtml.replace("user.token", createToken(user)),
+      html: verifyEmailHtml
+        .replace("user.token", createToken(user))
+        .replace("host.name", `${req.protocol}://${req.headers.host}`),
     };
 
     transporter.sendMail(details, (err: any) => {

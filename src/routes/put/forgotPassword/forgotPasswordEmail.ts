@@ -2,9 +2,7 @@ import express, { Request, Response } from "express";
 import nodemailer from "nodemailer";
 require("dotenv").config({ path: "../../../.env" });
 
-import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { UserResetPassword } from "../../../core/data/types";
-import { hashPassword } from "../../../core/bcrypt/bcrypt";
 import { roles } from "../../../core/data/roles";
 import { resetPasswordEmailHtml } from "../../../core/email/html/resetPasswordEmailHtml";
 import { createToken } from "../../../core/jwt/jsonwebtoken";
@@ -13,14 +11,11 @@ import { pool } from "../../../core/database/pool";
 const router = express.Router();
 
 router.put("/", async (req: Request, res: Response) => {
-  let arrOfItems = [req.body.username, req.body.newPassword];
-
-  if (!verifyArray(arrOfItems))
+  if (req.body.username === undefined || req.body.username === "")
     return res.status(400).send({ detail: "Provide all items" });
 
   const user: UserResetPassword = {
     username: req.body.username,
-    newPassword: req.body.newPassword,
     role: roles.resetPassword,
   };
 
@@ -48,8 +43,6 @@ router.put("/", async (req: Request, res: Response) => {
     },
   });
 
-  user.newPassword = await hashPassword(user.newPassword);
-
   const token = createToken(user);
 
   let details = {
@@ -58,7 +51,7 @@ router.put("/", async (req: Request, res: Response) => {
     subject: "Reset Password Email",
     html: resetPasswordEmailHtml
       .replace("user.token", token)
-      .replace("user.token", token),
+      .replace("host.name", `${req.protocol}://${req.headers.host}`),
   };
 
   transporter.sendMail(details, (err: any) => {

@@ -19,7 +19,6 @@ export type UserLogin = {
 
 export type UserResetPassword = {
   username: string;
-  newPassword: string;
   role: string;
 };
 

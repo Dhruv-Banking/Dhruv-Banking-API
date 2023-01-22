@@ -5,6 +5,7 @@ import { decryptToken } from "../../../core/jwt/jsonwebtoken";
 import { pool } from "../../../core/database/pool";
 import { authToken } from "../../../core/auth/auth";
 import { forgotPasswordFromTokenMiddleware } from "../../../core/middleware/putMiddleware";
+import { hashPassword } from "../../../core/bcrypt/bcrypt";
 
 const router = express.Router();
 
@@ -19,6 +20,11 @@ router.put(
 
     let payload;
 
+    if (req.body.newPassword === undefined || req.body.newPassword === "")
+      return res.status(400).send({ detail: "Provide all items" });
+
+    let hashedPassword = await hashPassword(req.body.newPassword);
+
     try {
       payload = decryptToken(token!);
     } catch (err: any) {
@@ -27,7 +33,7 @@ router.put(
 
     const query = {
       text: "UPDATE public.users SET password=$1 WHERE username=$2",
-      values: [payload.newPassword, payload.username],
+      values: [hashedPassword, payload.username],
     };
 
     let sqlRes;
@@ -39,7 +45,7 @@ router.put(
     }
 
     return res.status(201).send({
-      detail: `Successfully updated the password of ${payload.username}`,
+      detail: `Successfully updated password`,
     });
   }
 );
