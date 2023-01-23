@@ -1,7 +1,11 @@
 dev:
 	@npm run dev
 
+clean:
+	rm -rf build/
+
 _build:
+	make clean
 	npm run build
 	mkdir build/public
 	mkdir build/public/forgotPassword
@@ -15,5 +19,6 @@ _build:
 	cp src/cert.pem build/
 	cp src/key.pem build/
 
-clean:
-	rm -rf build/
+start:
+	@make _build
+	node build/index.js
