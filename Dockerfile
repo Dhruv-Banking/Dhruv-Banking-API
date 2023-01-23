@@ -12,4 +12,4 @@ EXPOSE 3000
 EXPOSE 5432
 EXPOSE 6379
 
-CMD [ "make" ]
+CMD [ "make", "start" ]
