@@ -23,6 +23,19 @@ router.post("/refreshToken", async (req: Request, res: Response) => {
     return res.status(400).send({ detail: "How dare you give me a bad token" });
   }
 
+  let query = {
+    text: "SELECT role FROM public.users WHERE username=$1",
+    values: [tokenData.username],
+  };
+
+  let sqlRes: any;
+
+  try {
+    sqlRes = await pool.query(query);
+  } catch (err: any) {
+    return res.status(500).send({ detail: err.stack });
+  }
+
   let redisRes = await client.get(`${tokenData.username}`);
 
   if (token === null)
@@ -45,7 +58,7 @@ router.post("/refreshToken", async (req: Request, res: Response) => {
       const accessToken = createToken({
         username: user.username,
         password: user.password,
-        role: user.role,
+        role: sqlRes.rows[0].role,
       });
 
       return res.send({ accessToken: accessToken });
