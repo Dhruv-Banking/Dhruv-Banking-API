@@ -3,7 +3,6 @@ require("dotenv").config({ path: "../../../.env" });
 
 import { SendMoneyToAnotherUser } from "../../../core/data/types";
 import { pool } from "../../../core/database/pool";
-import { comparePassword } from "../../../core/bcrypt/bcrypt";
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { updateToAnotherUser } from "../../../core/transactions/transactions";
 import { transferMoneyMiddleware } from "../../../core/middleware/putMiddleware";
@@ -25,7 +24,6 @@ router.put(
       req.body.userFrom,
       req.body.userTo,
       req.body.amount.toString(),
-      req.body.password,
     ];
 
     if (!verifyArray(arrOfItems))
@@ -40,7 +38,6 @@ router.put(
       userFrom: req.body.userFrom,
       userTo: req.body.userTo,
       amount: req.body.amount,
-      password: req.body.password,
     };
 
     if (user.userFrom === user.userTo)
@@ -51,7 +48,7 @@ router.put(
     let sqlRes;
 
     const queryGetPassCheckings = {
-      text: "SELECT checkings, password FROM users WHERE username=$1",
+      text: "SELECT checkings FROM users WHERE username=$1",
       values: [user.userFrom],
     };
 
@@ -65,9 +62,6 @@ router.put(
       return res
         .status(400)
         .send({ detail: "User sending money does not exist." });
-
-    if (!(await comparePassword(user.password, sqlRes.rows[0].password)))
-      return res.status(400).send({ detail: "Password incorrect." });
 
     if (user.amount > sqlRes.rows[0].checkings)
       return res.status(400).send({ detail: "Insufficent Funds." });

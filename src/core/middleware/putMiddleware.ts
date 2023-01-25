@@ -32,13 +32,15 @@ export function transferMoneyMiddleware(
   if (token === null) return res.sendStatus(401);
 
   let payload = decryptToken(token);
-  let username = req.query.username;
+  let username = req.body.username;
   let tokenName = payload.username;
 
   if (!(roleValues[payload.role] >= 7))
     return res
       .status(400)
       .send({ detail: "You are not authorized to perform this action" });
+
+  if (roleValues[payload.role] >= 8) return next();
 
   if (username !== tokenName) {
     res.status(400);

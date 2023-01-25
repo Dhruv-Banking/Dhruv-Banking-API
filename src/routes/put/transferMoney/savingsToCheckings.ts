@@ -3,7 +3,6 @@ require("dotenv").config({ path: "../../../.env" });
 
 import { SendMoneyToMyself } from "../../../core/data/types";
 import { pool } from "../../../core/database/pool";
-import { comparePassword } from "../../../core/bcrypt/bcrypt";
 import { verifyArray } from "../../../core/verifyArray/verifyArray";
 import { updateSavingsToCheckings } from "../../../core/transactions/transactions";
 import { transferMoneyMiddleware } from "../../../core/middleware/putMiddleware";
@@ -21,11 +20,7 @@ router.put(
         .status(400)
         .send({ detail: "Amount must be of type int, and not empty" });
 
-    const arrOfItems = [
-      req.body.username,
-      req.body.amount.toString(),
-      req.body.password,
-    ];
+    const arrOfItems = [req.body.username, req.body.amount.toString()];
 
     if (req.body.amount <= 0)
       return res
@@ -34,7 +29,6 @@ router.put(
 
     const user: SendMoneyToMyself = {
       username: req.body.username,
-      password: req.body.password,
       amount: req.body.amount,
     };
 
@@ -44,7 +38,7 @@ router.put(
     let sqlResGetPassSavings;
 
     const queryGetPassSavings = {
-      text: "SELECT savings, password FROM public.users WHERE username=$1",
+      text: "SELECT savings FROM public.users WHERE username=$1",
       values: [user.username],
     };
 
@@ -56,14 +50,6 @@ router.put(
 
     if (sqlResGetPassSavings.rowCount === 0)
       return res.status(400).send({ detail: "You do not exist" });
-
-    if (
-      !(await comparePassword(
-        user.password,
-        sqlResGetPassSavings.rows[0].password
-      ))
-    )
-      return res.status(400).send({ detail: "User not authenticated" });
 
     if (user.amount > sqlResGetPassSavings.rows[0].savings)
       return res.status(400).send({ detail: "Insufficient funds" });

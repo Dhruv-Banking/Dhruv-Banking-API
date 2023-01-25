@@ -24,7 +24,6 @@ export type UserResetPassword = {
 
 export type SendMoneyToMyself = {
   username: string;
-  password: string;
   amount: number;
 };
 
@@ -32,7 +31,6 @@ export type SendMoneyToAnotherUser = {
   userFrom: string;
   userTo: string;
   amount: number;
-  password: string;
 };
 
 export type DeleteUser = {
