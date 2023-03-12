@@ -12,11 +12,8 @@ router.post(
   authToken,
   allDhruvEndpointMiddleware,
   async (req: Request, res: Response) => {
-    let result = await createTables();
-
-    if (result) return res.send({ detail: "Success making tables" });
-
-    return res.send({ detail: result });
+    await createTables();
+    return res.send({ detail: "Success!" });
   }
 );
 
