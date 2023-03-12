@@ -1,7 +1,7 @@
 // This file is in case I hit the database with a good ol' `sudo rm -rf /` or forget the ssh keys :skull:
 import { pool } from "./pool";
 
-async function createUsersTable(): Promise<any> {
+async function createUsersTable(): Promise<void> {
   try {
     await pool.query(
       `
@@ -20,13 +20,12 @@ async function createUsersTable(): Promise<any> {
         );
         `
     );
-    return true;
   } catch (e: any) {
-    return e;
+    console.log(e);
   }
 }
 
-async function createFlagIpTable(): Promise<any> {
+async function createFlagIpTable(): Promise<void> {
   try {
     await pool.query(
       `
@@ -36,17 +35,12 @@ async function createFlagIpTable(): Promise<any> {
         );
        `
     );
-    return true;
   } catch (e: any) {
-    return e;
+    console.log(e);
   }
 }
 
-export async function createTables(): Promise<any> {
-  let createUsersTableResult = await createUsersTable();
-  let createFlagIpTableResult = await createFlagIpTable();
-
-  if (createUsersTableResult && createFlagIpTableResult) return true;
-
-  return [createUsersTableResult, createFlagIpTableResult];
+export async function createTables(): Promise<void> {
+  await createUsersTable();
+  await createFlagIpTable();
 }
