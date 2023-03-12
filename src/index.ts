@@ -4,6 +4,11 @@ import rateLimiter from "express-rate-limit";
 import fs from "fs";
 import https from "https";
 import path from "path";
+import chalk from "chalk";
+
+import { testConnecton } from "./core/database/pool";
+import { client } from "./core/database/redis";
+import { createTables } from "./core/database/tables";
 
 const limiter = rateLimiter({
   windowMs: 60 * 1000, // 1 Minutes
@@ -17,6 +22,8 @@ app.use(express.static(path.join(__dirname + "/public")));
 app.use(cors());
 app.use(limiter);
 const port = 3000;
+const log = console.log;
+chalk.level = 1;
 
 // Routes -- Auth
 const login = require("./core/auth/login");
@@ -41,7 +48,7 @@ const toAnotherUser = require("./routes/put/transferMoney/toAnotherUser");
 const deleteUser = require("./routes/delete/deleteUser");
 
 // Routes -- DHRUV
-const createTables = require("./routes/dhruv/createTables");
+const createTablesEnd = require("./routes/dhruv/createTables");
 const clearIps = require("./routes/dhruv/clearIps");
 const drop = require("./routes/dhruv/drop");
 
@@ -74,7 +81,7 @@ app.use("/dhruvbanking/put/toAnotherUser", toAnotherUser);
 app.use("/dhruvbanking/delete/deleteUser", deleteUser);
 
 // Use Routes -- DHRUV
-app.use("/dhruvbanking/dhruv/createTables", createTables);
+app.use("/dhruvbanking/dhruv/createTables", createTablesEnd);
 app.use("/dhruvbanking/dhruv/clearIps", clearIps);
 app.use("/dhruvbanking/dhruv/drop", drop);
 
@@ -103,6 +110,18 @@ var credentials = { key: privateKey, cert: certificate };
 
 var httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+(async () => {
+  await testConnecton();
+  log(chalk.blue("SQL Connection Secure"), chalk.green("✓"));
+
+  client.on("connect", () =>
+    log(chalk.blue("Redis Connection Secure"), chalk.green("✓"))
+  );
+
+  await createTables();
+  log(chalk.blue("Tables Created"), chalk.green("✓"));
+
+  httpsServer.listen(port, () => {
+    log(chalk.blue(`Listening on https port ${port}`));
+  });
+})();
